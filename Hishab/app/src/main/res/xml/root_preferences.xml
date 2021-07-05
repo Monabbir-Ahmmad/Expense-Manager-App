@@ -1,0 +1,62 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Theme">
+
+        <ListPreference
+            app:defaultValue="System default"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:iconSpaceReserved="false"
+            app:key="theme"
+            app:title="Choose theme"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Currency type">
+
+        <ListPreference
+            app:defaultValue="$"
+            app:entries="@array/currency_entries"
+            app:entryValues="@array/currency_values"
+            app:iconSpaceReserved="false"
+            app:key="currency"
+            app:title="Choose currency"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Backup &amp; Restore">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="backup"
+            app:summary="Backup user data in local storage as CSV fle"
+            app:title="Backup data" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="restore"
+            app:summary="Restore user data from CSV file"
+            app:title="Restore data" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="About">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:summary="1.0"
+            app:title="Version" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

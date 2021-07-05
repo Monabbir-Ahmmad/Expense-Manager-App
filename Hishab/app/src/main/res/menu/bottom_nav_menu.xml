@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottomNav_overview"
+        android:icon="@drawable/ic_overview"
+        android:title="Overview" />
+
+    <item
+        android:id="@+id/bottomNav_placeholder"
+        android:checkable="false"
+        android:title="" />
+
+    <item
+        android:id="@+id/bottomNav_statistics"
+        android:icon="@drawable/ic_statistics"
+        android:title="Statistics" />
+
+</menu>

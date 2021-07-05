@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Array for category names -->
+    <string-array name="categoryArray">
+        <item>Bill</item>
+        <item>Clothing</item>
+        <item>Education</item>
+        <item>Entertainment</item>
+        <item>Finance</item>
+        <item>Food</item>
+        <item>Health Care</item>
+        <item>Housing</item>
+        <item>Miscellaneous</item>
+        <item>Parenting</item>
+        <item>Personal Care</item>
+        <item>Personal Vehicle</item>
+        <item>Pet Care</item>
+        <item>Service</item>
+        <item>Shopping</item>
+        <item>Tax</item>
+        <item>Public Transport</item>
+        <item>Travel</item>
+    </string-array>
+
+    <!-- Array for category icons -->
+    <integer-array name="iconArray">
+        <item>@drawable/ic_bill</item>
+        <item>@drawable/ic_clothes</item>
+        <item>@drawable/ic_education</item>
+        <item>@drawable/ic_entertainment</item>
+        <item>@drawable/ic_finance</item>
+        <item>@drawable/ic_food</item>
+        <item>@drawable/ic_health</item>
+        <item>@drawable/ic_housing</item>
+        <item>@drawable/ic_misc</item>
+        <item>@drawable/ic_parenting</item>
+        <item>@drawable/ic_personal_care</item>
+        <item>@drawable/ic_personal_vehicle</item>
+        <item>@drawable/ic_pet</item>
+        <item>@drawable/ic_service</item>
+        <item>@drawable/ic_shopping</item>
+        <item>@drawable/ic_tax</item>
+        <item>@drawable/ic_transport</item>
+        <item>@drawable/ic_travel</item>
+    </integer-array>
+
+    <!-- Array for sort by -->
+    <string-array name="sortByArray">
+        <item>Default</item>
+        <item>Date: Newest</item>
+        <item>Date: Oldest</item>
+        <item>Amount: ASC</item>
+        <item>Amount: DESC</item>
+    </string-array>
+
+    <!-- Array for sort by -->
+    <string-array name="monthsArray">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <!-- Color array for pie chart -->
+    <array name="colorArray">
+        <item>#005EBD</item>
+        <item>#1488FF</item>
+        <item>#1CC1D6</item>
+        <item>#1B9186</item>
+        <item>#36AA3B</item>
+        <item>#00FF4C</item>
+        <item>#82C34A</item>
+        <item>#B9D636</item>
+        <item>#FFC800</item>
+        <item>#FF6F00</item>
+        <item>#ED3F33</item>
+        <item>#FD4583</item>
+        <item>#BA2AC5</item>
+        <item>#7847FF</item>
+        <item>#5A2CB8</item>
+        <item>#607D8B</item>
+        <item>#9E9E9E</item>
+        <item>#795548</item>
+    </array>
+
+    <!-- Theme preference entries -->
+    <string-array name="theme_entries">
+        <item>System default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <!-- Theme preference values -->
+    <string-array name="theme_values">
+        <item>System default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+    <!-- Currency preference entries -->
+    <string-array name="currency_entries">
+        <item>Dollar</item>
+        <item>Euro</item>
+        <item>Pound</item>
+        <item>Rupee</item>
+        <item>Taka</item>
+        <item>Yen</item>
+    </string-array>
+    <!-- Currency preference values -->
+    <string-array name="currency_values">
+        <item>$</item>
+        <item>€</item>
+        <item>£</item>
+        <item>₹</item>
+        <item>৳</item>
+        <item>¥</item>
+    </string-array>
+
+</resources>

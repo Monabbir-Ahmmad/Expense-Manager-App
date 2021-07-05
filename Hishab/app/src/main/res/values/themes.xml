@@ -1,0 +1,72 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Hishab" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue_300</item>
+        <item name="colorPrimaryVariant">@color/blue_300</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/blue_300</item>
+        <item name="colorSecondaryVariant">@color/blue_300</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!--Activity background color-->
+        <item name="android:windowBackground">?attr/bgColor</item>
+        <item name="android:colorBackground">?attr/bgColor</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/bgColor</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Custom colors. -->
+        <item name="bgColor">@color/white</item>
+        <item name="colorBlackWhite">@color/dark_black</item>
+        <item name="surfaceColor">@color/white</item>
+
+        <!-- Bottom sheet style. -->
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+
+    </style>
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <!--Custom single choice alert dialog-->
+    <style name="CustomAlertDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <!-- Used for the title and text -->
+        <item name="android:textColor">@color/black</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <!--Custom card style-->
+    <style name="CustomCard" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="cardCornerRadius">4dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
+    <!--Custom divider style-->
+    <style name="Divider" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:background">@color/gray_500</item>
+        <item name="android:alpha">0.5</item>
+    </style>
+
+    <style name="Divider.Horizontal" parent="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
+    <style name="Divider.Vertical" parent="Divider">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+
+</resources>

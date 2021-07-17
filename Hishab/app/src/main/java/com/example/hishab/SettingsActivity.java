@@ -2,17 +2,15 @@ package com.example.hishab;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -21,7 +19,6 @@ import com.example.hishab.database.LocalBackupDB;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private static final int STORAGE_REQUEST_CODE = 1;
     private boolean refreshMainUI = false;
 
     @Override
@@ -63,21 +60,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == STORAGE_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                LocalBackupDB localBackupDB = new LocalBackupDB(this);
-                localBackupDB.backupData();
-            } else {
-                Toast.makeText(this, "Storage permission required", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
     //This will make sure the UI will refresh
     private void refreshUI() {
         this.refreshMainUI = true;
@@ -87,7 +69,13 @@ public class SettingsActivity extends AppCompatActivity {
     // Inner fragment class
     public static class SettingsFragment extends PreferenceFragmentCompat {
 
-        private final String[] storagePer = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        //Permission request to backup data
+        private final ActivityResultLauncher<String> backupReq = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(), result -> backupData(result));
+
+        //Permission request to restore data
+        private final ActivityResultLauncher<String> restoreReq = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(), result -> restoreData(result));
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -120,7 +108,14 @@ public class SettingsActivity extends AppCompatActivity {
             // This is for when backup preference is clicked
             Preference backupDatabase = findPreference("backup");
             backupDatabase.setOnPreferenceClickListener(preference -> {
-                backupData();
+                backupReq.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                return true;
+            });
+
+            // This is for when restore preference is clicked
+            Preference restoreDatabase = findPreference("restore");
+            restoreDatabase.setOnPreferenceClickListener(preference -> {
+                restoreReq.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 return true;
             });
 
@@ -128,25 +123,41 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         // This is for backing up data
-        private void backupData() {
-            // Show warning alert dialog
-            new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog)
-                    .setTitle("Are you sure?")
-                    .setMessage("This will override any existing backup file")
-                    .setNegativeButton("Cancel", null)
-                    .setPositiveButton("Ok", (dialog, which) -> { // When user confirms
-                        boolean hasPermission = ContextCompat.checkSelfPermission(getActivity(),
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-
-                        if (hasPermission) { //When there is permission
+        private void backupData(boolean permission) {
+            if (permission) {
+                // Show warning alert dialog
+                new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog)
+                        .setTitle("Are you sure?")
+                        .setMessage("This will override any existing backup file")
+                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton("Ok", (dialog, which) -> { // When user confirms
                             LocalBackupDB localBackupDB = new LocalBackupDB(getActivity());
                             localBackupDB.backupData();
+                        })
+                        .show();
+            } else {
+                Toast.makeText(getActivity(), "Storage permission required", Toast.LENGTH_SHORT).show();
+            }
+        }
 
-                        } else { //Request permission when no permission found
-                            ActivityCompat.requestPermissions(getActivity(), storagePer, STORAGE_REQUEST_CODE);
-                        }
-                    })
-                    .show();
+
+        // This is for restoring up data
+        private void restoreData(boolean permission) {
+            if (permission) {
+                // Show warning alert dialog
+                new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog)
+                        .setTitle("Are you sure?")
+                        .setMessage("This will merge backup data with existing data")
+                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton("Ok", (dialog, which) -> { // When user confirms
+                            LocalBackupDB localBackupDB = new LocalBackupDB(getActivity());
+                            if (localBackupDB.restoreData())
+                                ((SettingsActivity) getActivity()).refreshUI();
+                        })
+                        .show();
+            } else {
+                Toast.makeText(getActivity(), "Storage permission required", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

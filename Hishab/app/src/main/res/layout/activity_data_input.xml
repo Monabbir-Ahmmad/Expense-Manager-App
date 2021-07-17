@@ -12,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/toolbar_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight" />
 
     <androidx.core.widget.NestedScrollView
@@ -53,9 +53,9 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/amount"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:hint="@string/amount"
                 app:endIconMode="clear_text"
                 app:helperText="(Required)"
                 app:helperTextEnabled="true"
@@ -95,8 +95,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
                 android:hint="@string/date"
                 app:startIconDrawable="@drawable/ic_calendar">
 
@@ -112,8 +112,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
                 android:hint="@string/time"
                 app:startIconDrawable="@drawable/ic_time">
 

@@ -115,10 +115,10 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
         Calendar calendar = Calendar.getInstance();
 
+        initPieChart(0);
+
         btnLineSort.setText(monthYearFormat.format(calendar.getTime()));
         initLineChart(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
-
-        initPieChart(0);
 
         btnBarSort.setText(String.valueOf(calendar.get(Calendar.YEAR)));
         initBarChart(calendar.get(Calendar.YEAR));
@@ -436,7 +436,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         pieChart.setDragDecelerationFrictionCoef(0.97f);
 
         //Off set
-        pieChart.setExtraOffsets(0f, 10f, 0f, 60f);
+        pieChart.setExtraOffsets(0f, 15f, 0f, 55f);
 
         //Refresh chart
         pieChart.notifyDataSetChanged();
@@ -631,7 +631,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         barChart.setExtraOffsets(0, 0, 10f, 10f);
 
         //Refresh chart
-        barDataSet.notifyDataSetChanged();
+        barChart.notifyDataSetChanged();
         barChart.fitScreen();
         barChart.invalidate();
 

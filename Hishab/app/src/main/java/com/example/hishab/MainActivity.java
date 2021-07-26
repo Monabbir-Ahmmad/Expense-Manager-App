@@ -93,9 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
             drawer.closeDrawer(GravityCompat.START);
 
-        } else if (item.getItemId() == R.id.nav_help) {
-            drawer.closeDrawer(GravityCompat.START);
-
         } else if (item.getItemId() == R.id.nav_feedback) {
             sendFeedback();
             drawer.closeDrawer(GravityCompat.START);

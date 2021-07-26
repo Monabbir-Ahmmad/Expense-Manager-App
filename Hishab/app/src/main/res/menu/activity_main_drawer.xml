@@ -8,10 +8,6 @@
         android:icon="@drawable/ic_settings"
         android:title="Settings" />
 
-    <item
-        android:id="@+id/nav_help"
-        android:icon="@drawable/ic_help"
-        android:title="help" />
 
     <item
         android:id="@+id/nav_feedback"

@@ -29,7 +29,9 @@
             android:weightSum="3"
             app:checkedButton="@+id/btn_week"
             app:selectionRequired="true"
-            app:singleSelection="true">
+            app:singleSelection="true"
+
+            >
 
             <Button
                 android:id="@+id/btn_week"

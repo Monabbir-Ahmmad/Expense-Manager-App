@@ -3,29 +3,29 @@
 
     <!-- Array for category names -->
     <string-array name="categoryArray">
-        <item>Bill</item>
+        <item>Bills</item>
         <item>Clothing</item>
         <item>Education</item>
         <item>Entertainment</item>
         <item>Finance</item>
         <item>Food</item>
-        <item>Health Care</item>
+        <item>Health</item>
         <item>Housing</item>
         <item>Miscellaneous</item>
         <item>Parenting</item>
         <item>Personal Care</item>
         <item>Personal Vehicle</item>
-        <item>Pet Care</item>
+        <item>Pets</item>
         <item>Service</item>
         <item>Shopping</item>
         <item>Tax</item>
-        <item>Public Transport</item>
+        <item>Transport</item>
         <item>Travel</item>
     </string-array>
 
     <!-- Array for category icons -->
     <integer-array name="iconArray">
-        <item>@drawable/ic_bill</item>
+        <item>@drawable/ic_bills</item>
         <item>@drawable/ic_clothes</item>
         <item>@drawable/ic_education</item>
         <item>@drawable/ic_entertainment</item>

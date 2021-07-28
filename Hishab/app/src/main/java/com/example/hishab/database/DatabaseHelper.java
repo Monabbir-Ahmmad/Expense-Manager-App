@@ -137,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<DataItem> allData = new ArrayList<>();
         database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE "
-                + DELETED + " = 0" + " ORDER BY " + ID + " DESC", null);
+                + DELETED + " = 0" + " ORDER BY " + TIMESTAMP + " DESC", null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -161,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //This queries filtered data from table
     public ArrayList<DataItem> getFilteredData(String category, String sortBy, long startTimestamp, long endTimestamp) {
-        String order = ID, orderBy = "DESC";
+        String order = TIMESTAMP, orderBy = "DESC";
 
         if (category.contains("All"))
             category = "";

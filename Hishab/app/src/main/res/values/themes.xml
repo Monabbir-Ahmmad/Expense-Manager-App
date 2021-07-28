@@ -46,11 +46,6 @@
     </style>
 
     <!--Custom card style-->
-    <style name="CustomCard" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="cardCornerRadius">4dp</item>
-        <item name="cardElevation">0dp</item>
-        <item name="cardBackgroundColor">@color/white</item>
-    </style>
 
     <!--Custom divider style-->
     <style name="Divider" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -61,11 +56,6 @@
     <style name="Divider.Horizontal" parent="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-    </style>
-
-    <style name="Divider.Vertical" parent="Divider">
-        <item name="android:layout_width">1dp</item>
-        <item name="android:layout_height">match_parent</item>
     </style>
 
 

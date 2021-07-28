@@ -1,4 +1,4 @@
-package com.example.hishab;
+package com.example.hishab.ui.addExpense;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hishab.DateTimeUtil;
+import com.example.hishab.MainActivity;
+import com.example.hishab.R;
 import com.example.hishab.data.DataItem;
 import com.example.hishab.database.DatabaseHelper;
-import com.example.hishab.ui.expense.CategoryRecyclerAdapter;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -151,14 +153,14 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    //Set expense category, date, time, note on create
+    //Set addExpense category, date, time, note on create
     private void setViewsNew() {
         etDate.setText(dateTimeUtil.getDate(new Date().getTime()));
         etTime.setText(dateTimeUtil.getTime(new Date().getTime()));
     }
 
 
-    //Set expense category, amount, date, time, note on create to update data
+    //Set addExpense category, amount, date, time, note on create to update data
     private void setViewsUpdate() {
         long timestamp = getIntent().getLongExtra("timestamp", 0);
         category = getIntent().getStringExtra("category");

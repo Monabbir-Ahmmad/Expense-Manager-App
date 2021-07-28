@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DataInputActivity">
+    tools:context=".ui.addExpense.DataInputActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_dataInput"

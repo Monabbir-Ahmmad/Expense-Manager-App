@@ -124,7 +124,7 @@ public class OverviewFragment extends Fragment {
             totalExpense += dataSet.get(i).getAmount();
         }
 
-        //This will set the current total expense
+        //This will set the current total addExpense
         tvTotalExpense.setText(String.format("%s%s", currency, decimalFormat.format(totalExpense)));
         tvRecordsFound.setText(String.valueOf(dataSet.size()));
     }

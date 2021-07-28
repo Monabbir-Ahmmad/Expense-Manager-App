@@ -17,7 +17,7 @@
             android:label="Settings"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".DataInputActivity"
+            android:name=".ui.addExpense.DataInputActivity"
             android:label="Add new"
             android:parentActivityName=".MainActivity" />
         <activity

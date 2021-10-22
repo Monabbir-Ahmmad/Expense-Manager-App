@@ -24,7 +24,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     private final ArrayList<DataItem> dataSet;
     private final TypedValue colorPrimary, bgColor;
     private int checkedPosition = -1;
-    private onItemClickListener listener;
+    private OnItemClickListener listener;
 
 
     //Constructor
@@ -38,7 +38,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     }
 
     // Set recycler item click listener
-    public void setOnItemClickListener(onItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -75,7 +75,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     }
 
     //Interface for onItemClickListener
-    public interface onItemClickListener {
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
@@ -87,7 +87,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         public final MaterialCardView cardContainer;
 
         //Inner classConstructor
-        public RecyclerViewHolder(View itemView, onItemClickListener listener) {
+        public RecyclerViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
 
             //Find views

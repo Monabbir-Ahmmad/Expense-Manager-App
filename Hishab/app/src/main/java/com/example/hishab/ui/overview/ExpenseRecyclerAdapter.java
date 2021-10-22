@@ -25,7 +25,7 @@ public class ExpenseRecyclerAdapter extends RecyclerView.Adapter<ExpenseRecycler
     private final ArrayList<DataItem> dataSet;
     private final DateTimeUtil dateTimeUtil;
     private final String currency;
-    private onItemClickListener listener;
+    private OnItemClickListener listener;
 
     //Constructor
     public ExpenseRecyclerAdapter(ArrayList<DataItem> dataSet, Context context) {
@@ -38,7 +38,7 @@ public class ExpenseRecyclerAdapter extends RecyclerView.Adapter<ExpenseRecycler
     }
 
     // Set recycler item click listener
-    public void setOnItemClickListener(onItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -73,7 +73,7 @@ public class ExpenseRecyclerAdapter extends RecyclerView.Adapter<ExpenseRecycler
     }
 
     //Interface for onItemClickListener
-    public interface onItemClickListener {
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
@@ -87,7 +87,7 @@ public class ExpenseRecyclerAdapter extends RecyclerView.Adapter<ExpenseRecycler
         public final TextView textViewNote;
 
         //Inner classConstructor
-        public RecyclerViewHolder(View itemView, onItemClickListener listener) {
+        public RecyclerViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
 
             //Find views

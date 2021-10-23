@@ -77,5 +77,14 @@ public class DataItem {
         this.icon = iconArray.getResourceId(index, -1);
     }
 
-
+    @Override
+    public String toString() {
+        return "DataItem{" +
+                "id=" + id +
+                ", category='" + category + '\'' +
+                ", amount=" + amount +
+                ", note='" + note + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 public class OverviewFragment extends Fragment {
 
     private TextView tvTotalExpense, tvRecordsFound;
+    private LinearLayout noDataLayout;
     private RecyclerView recyclerView;
     private ExpenseRecyclerAdapter recyclerAdapter;
     private DatabaseHelper databaseHelper;
@@ -49,17 +51,17 @@ public class OverviewFragment extends Fragment {
         setHasOptionsMenu(true);
         getActivity().setTitle("Overview");
 
-
         //Find views
         tvTotalExpense = view.findViewById(R.id.textView_totalExpense);
         tvRecordsFound = view.findViewById(R.id.textView_recordsFound);
         recyclerView = view.findViewById(R.id.recyclerView);
+        noDataLayout = view.findViewById(R.id.noDataLayout);
 
         databaseHelper = new DatabaseHelper(getActivity());
         dataSet = databaseHelper.getAllData();
 
         //This calculates the top panel values on startup
-        topPanelCalculation();
+        refreshOtherViews();
 
         //This creates the RecyclerView
         createRecyclerView();
@@ -84,8 +86,8 @@ public class OverviewFragment extends Fragment {
             FilterDialog filterDialog = new FilterDialog();
             filterDialog.setOnPositiveButtonClickListener((category, sortBy, startTimestamp, endTimestamp) -> {
                 dataSet = databaseHelper.getFilteredData(category, sortBy, startTimestamp, endTimestamp);
+                refreshOtherViews();
                 createRecyclerView();
-                topPanelCalculation();
             });
             filterDialog.show(getActivity().getSupportFragmentManager(), "FilterDialog");
         }
@@ -99,7 +101,7 @@ public class OverviewFragment extends Fragment {
         DataItem dataItem = dataSet.get(position);
         dataSet.remove(position);
         recyclerAdapter.notifyItemRemoved(position);
-        topPanelCalculation();
+        refreshOtherViews();
         databaseHelper.deleteData(dataItem.getId(), 1);
 
         //SnackBar for undoing item delete
@@ -107,26 +109,30 @@ public class OverviewFragment extends Fragment {
             dataSet.add(position, dataItem);
             recyclerAdapter.notifyItemInserted(position);
             recyclerView.smoothScrollToPosition(position);
-            topPanelCalculation();
+            refreshOtherViews();
             databaseHelper.deleteData(dataItem.getId(), 0);
         }).show();
     }
 
 
-    //This calculates the top panel values on startup
-    private void topPanelCalculation() {
+    //This calculates the top panel values and show no data found view if needed
+    private void refreshOtherViews() {
         double totalExpense = 0;
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
-        String currency = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getString("currency", "$");
+        String currency = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("currency", "$");
 
         for (int i = 0; i < dataSet.size(); i++) {
             totalExpense += dataSet.get(i).getAmount();
         }
 
-        //This will set the current total addExpense
+        //This will set the current total expense
         tvTotalExpense.setText(String.format("%s%s", currency, decimalFormat.format(totalExpense)));
         tvRecordsFound.setText(String.valueOf(dataSet.size()));
+
+        //Show recycler view or no data found based on data found or not
+        recyclerView.setVisibility(dataSet.isEmpty() ? View.GONE : View.VISIBLE);
+        noDataLayout.setVisibility(dataSet.isEmpty() ? View.VISIBLE : View.GONE);
+
     }
 
 

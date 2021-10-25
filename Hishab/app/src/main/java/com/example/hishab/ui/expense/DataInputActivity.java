@@ -1,4 +1,4 @@
-package com.example.hishab.ui.addExpense;
+package com.example.hishab.ui.expense;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +24,8 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -147,20 +149,19 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
         recyclerAdapter = new CategoryRecyclerAdapter(dataSet, this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerAdapter);
-        recyclerAdapter.setOnItemClickListener(position ->
-                category = dataSet.get(position).getCategory());
+        recyclerAdapter.setOnItemClickListener(position -> category = dataSet.get(position).getCategory());
 
     }
 
 
-    //Set addExpense category, date, time, note on create
+    //Set expense category, date, time, note on create
     private void setViewsNew() {
         etDate.setText(dateTimeUtil.getDate(new Date().getTime()));
         etTime.setText(dateTimeUtil.getTime(new Date().getTime()));
     }
 
 
-    //Set addExpense category, amount, date, time, note on create to update data
+    //Set expense category, amount, date, time, note on create to update data
     private void setViewsUpdate() {
         long timestamp = getIntent().getLongExtra("timestamp", 0);
         category = getIntent().getStringExtra("category");
@@ -194,11 +195,10 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
         } else { //When amount is valid and category is selected
 
             float amount = Float.parseFloat(amountText);
-            String note = etNote.getText().toString();
             Long timestamp = dateTimeUtil.getTimestamp(etDate.getText().toString(), etTime.getText().toString());
 
-            if (note.trim().isEmpty())
-                note = null;
+            String note = etNote.getText().toString();
+            note = StringUtils.isBlank(note) ? null : StringUtils.normalizeSpace(note);
 
             //If not update data, insert new data
             if (!isUpdate) {

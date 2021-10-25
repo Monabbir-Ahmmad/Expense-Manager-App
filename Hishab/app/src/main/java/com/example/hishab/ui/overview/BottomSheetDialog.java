@@ -14,8 +14,10 @@ import androidx.preference.PreferenceManager;
 import com.example.hishab.DateTimeUtil;
 import com.example.hishab.R;
 import com.example.hishab.data.DataItem;
-import com.example.hishab.ui.addExpense.DataInputActivity;
+import com.example.hishab.ui.expense.DataInputActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 
@@ -45,22 +47,15 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         Button btnEdit = view.findViewById(R.id.bottomSheet_edit);
 
         DateTimeUtil dateTimeUtil = new DateTimeUtil();
-        String currency = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getString("currency", "$");
+        String currency = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("currency", "$");
 
         tvCategory.setText(dataItem.getCategory());
         tvAmount.setText(String.format("%s%s", currency, decimalFormat.format(dataItem.getAmount())));
         tvDate.setText(dateTimeUtil.getDate(dataItem.getTimestamp()));
         tvTime.setText(dateTimeUtil.getTime(dataItem.getTimestamp()));
+        tvNote.setText(StringUtils.isBlank(dataItem.getNote()) ? "" : dataItem.getNote());
 
-        if (dataItem.getNote() != null) {
-            tvNote.setText(dataItem.getNote());
-        } else {
-            tvNote.setText("");
-        }
-
-        btnClose.setOnClickListener(v -> dismiss());
-
+        //When edit button is clicked
         btnEdit.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), DataInputActivity.class);
             intent.putExtra("update", true);
@@ -73,6 +68,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             startActivity(intent);
             dismiss();
         });
+
+        //When close button is clicked
+        btnClose.setOnClickListener(v -> dismiss());
 
         return view;
     }

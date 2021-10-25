@@ -8,9 +8,10 @@ import com.example.hishab.DateTimeUtil;
 import com.example.hishab.R;
 import com.example.hishab.data.DataItem;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +22,7 @@ public class LocalBackupDB {
     private final Context context;
     private final DatabaseHelper db;
 
+    //Constructor
     public LocalBackupDB(Context context) {
         this.context = context;
         db = new DatabaseHelper(context);
@@ -35,24 +37,21 @@ public class LocalBackupDB {
             DateTimeUtil dateTimeUtil = new DateTimeUtil();
 
             try {
-                //Write CSV file
-                OutputStream fileOutputStream = context.getContentResolver().openOutputStream(fileUri);
+                CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(context.getContentResolver().openOutputStream(fileUri, "wt")));
 
                 //The first row are the headers
-                fileOutputStream.write("CATEGORY,AMOUNT,DATE,TIME,NOTE\n".getBytes());
+                csvWriter.writeNext(new String[]{"CATEGORY", "AMOUNT", "DATE", "TIME", "NOTE"}, true);
 
+                //Write each row in the file
                 for (DataItem dataItem : dataset) {
-                    fileOutputStream.write(String.format("%s,%s,%s,%s,\"%s\"\n",
-                            dataItem.getCategory(),
-                            dataItem.getAmount(),
+                    csvWriter.writeNext(new String[]{dataItem.getCategory(),
+                            String.valueOf(dataItem.getAmount()),
                             dateTimeUtil.getDate(dataItem.getTimestamp()),
                             dateTimeUtil.getTime(dataItem.getTimestamp()),
-                            dataItem.getNote() == null ? "" : dataItem.getNote()
-                    ).getBytes());
+                            dataItem.getNote() == null ? "" : dataItem.getNote()}, true);
                 }
 
-                fileOutputStream.flush();
-                fileOutputStream.close();
+                csvWriter.close();
 
                 Toast.makeText(context, "Backup file created", Toast.LENGTH_LONG).show();
 
@@ -69,13 +68,13 @@ public class LocalBackupDB {
         try {
             CSVReader csvReader = new CSVReader(new InputStreamReader(context.getContentResolver().openInputStream(fileUri)));
 
-            //Skip the first row because the are the headers
+            //Skip the first row because they are the headers
             String[] nextLine = csvReader.readNext();
 
             DateTimeUtil dateTimeUtil = new DateTimeUtil();
             List<String> categoryArray = Arrays.asList(context.getResources().getStringArray(R.array.categoryArray));
 
-            // Read each row in the file
+            //Read each row in the file
             while ((nextLine = csvReader.readNext()) != null) {
                 String category = nextLine[0];
                 float amount = Float.parseFloat(nextLine[1]);
@@ -94,7 +93,7 @@ public class LocalBackupDB {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return false;
     }

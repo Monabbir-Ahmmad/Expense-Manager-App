@@ -41,8 +41,7 @@ public class LineChartMarker extends MarkerView {
         getContext().getTheme().resolveAttribute(R.attr.colorPrimary, colorPrimary, true);
         surfaceColor = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.surfaceColor, surfaceColor, true);
-        currency = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString("currency", "$");
+        currency = PreferenceManager.getDefaultSharedPreferences(context).getString("currency", "$");
     }
 
     //Callbacks every time the MarkerView is redrawn, can be used to update the views

@@ -16,7 +16,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.preference.PreferenceManager;
 
-import com.example.hishab.ui.addExpense.DataInputActivity;
+import com.example.hishab.ui.expense.DataInputActivity;
 import com.example.hishab.ui.overview.OverviewFragment;
 import com.example.hishab.ui.statistics.StatisticsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

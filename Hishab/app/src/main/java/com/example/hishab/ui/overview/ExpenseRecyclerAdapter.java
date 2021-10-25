@@ -15,6 +15,8 @@ import com.example.hishab.DateTimeUtil;
 import com.example.hishab.R;
 import com.example.hishab.data.DataItem;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -58,11 +60,11 @@ public class ExpenseRecyclerAdapter extends RecyclerView.Adapter<ExpenseRecycler
         holder.textViewCategory.setText(dataSet.get(position).getCategory());
         holder.textViewAmount.setText(String.format("%s%s", currency, decimalFormat.format(dataSet.get(position).getAmount())));
         holder.textViewDateTime.setText(dateTimeUtil.getTimeAgo(dataSet.get(position).getTimestamp()));
-        if (dataSet.get(position).getNote() != null) {
+        if (StringUtils.isBlank(dataSet.get(position).getNote())) {
+            holder.textViewNote.setVisibility(View.GONE);
+        } else {
             holder.textViewNote.setVisibility(View.VISIBLE);
             holder.textViewNote.setText(String.format("%s", dataSet.get(position).getNote()));
-        } else {
-            holder.textViewNote.setVisibility(View.GONE);
         }
 
     }

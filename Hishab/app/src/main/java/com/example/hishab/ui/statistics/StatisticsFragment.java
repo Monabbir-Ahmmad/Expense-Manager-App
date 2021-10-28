@@ -219,7 +219,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         }
 
         //No data text
-        pieChart.setNoDataText("No data found!");
+        pieChart.setNoDataText("No Data Found");
         pieChart.setNoDataTextColor(colorBlackWhite.data);
         pieChart.getPaint(Chart.PAINT_INFO).setTextSize(Utils.convertDpToPixel(20f));
 
@@ -273,7 +273,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         }
 
         //No data text
-        lineChart.setNoDataText("No data found!");
+        lineChart.setNoDataText("No Data Found");
         lineChart.setNoDataTextColor(colorBlackWhite.data);
         lineChart.getPaint(Chart.PAINT_INFO).setTextSize(Utils.convertDpToPixel(20f));
 
@@ -331,7 +331,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         }
 
         //No data text
-        barChart.setNoDataText("No data found!");
+        barChart.setNoDataText("No Data Found");
         barChart.setNoDataTextColor(colorBlackWhite.data);
         barChart.getPaint(Chart.PAINT_INFO).setTextSize(Utils.convertDpToPixel(20f));
 

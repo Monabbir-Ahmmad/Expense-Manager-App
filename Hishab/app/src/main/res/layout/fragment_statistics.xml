@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:text="Daily average" />
+                    android:text="Daily Average" />
             </LinearLayout>
 
             <LinearLayout
@@ -166,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:text="Monthly total" />
+                    android:text="Monthly Total" />
             </LinearLayout>
 
         </LinearLayout>
@@ -251,7 +251,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:text="Monthly average" />
+                    android:text="Monthly Average" />
             </LinearLayout>
 
             <LinearLayout
@@ -274,7 +274,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:text="Yearly total" />
+                    android:text="Yearly Total" />
             </LinearLayout>
 
         </LinearLayout>

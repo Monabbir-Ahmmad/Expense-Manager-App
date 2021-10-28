@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         sideNavView.setNavigationItemSelectedListener(this);
-        bottomNavBar.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
-        bottomNavBar.setOnNavigationItemReselectedListener(item -> { //DO nothing
+        bottomNavBar.setOnItemSelectedListener(this::onNavigationItemSelected);
+        bottomNavBar.setOnItemReselectedListener(item -> { //DO nothing
         });
 
         fabAddRecord.setOnClickListener(v -> startActivity(new Intent(this,

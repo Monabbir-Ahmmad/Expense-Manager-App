@@ -1,8 +1,5 @@
 package com.example.hishab.ui.overview;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -23,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.hishab.R;
 import com.example.hishab.data.DataItem;
 import com.example.hishab.database.DatabaseHelper;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
@@ -33,6 +30,7 @@ public class OverviewFragment extends Fragment {
 
     private TextView tvTotalExpense, tvRecordsFound;
     private LinearLayout noDataLayout;
+    private AppBarLayout appBarLayout;
     private RecyclerView recyclerView;
     private ExpenseRecyclerAdapter recyclerAdapter;
     private DatabaseHelper databaseHelper;
@@ -56,6 +54,7 @@ public class OverviewFragment extends Fragment {
         tvRecordsFound = view.findViewById(R.id.textView_recordsFound);
         recyclerView = view.findViewById(R.id.recyclerView);
         noDataLayout = view.findViewById(R.id.noDataLayout);
+        appBarLayout = view.findViewById(R.id.appBarLayout_overview);
 
         databaseHelper = new DatabaseHelper(getActivity());
         dataSet = databaseHelper.getAllData();
@@ -85,9 +84,11 @@ public class OverviewFragment extends Fragment {
         if (item.getItemId() == R.id.menu_filter) { //Open filter dialog
             FilterDialog filterDialog = new FilterDialog();
             filterDialog.setOnPositiveButtonClickListener((category, sortBy, startTimestamp, endTimestamp) -> {
-                dataSet = databaseHelper.getFilteredData(category, sortBy, startTimestamp, endTimestamp);
+                dataSet.clear();
+                dataSet.addAll(databaseHelper.getFilteredData(category, sortBy, startTimestamp, endTimestamp));
+                recyclerAdapter.notifyDataSetChanged();
+                appBarLayout.setExpanded(true, true);
                 refreshOtherViews();
-                createRecyclerView();
             });
             filterDialog.show(getActivity().getSupportFragmentManager(), "FilterDialog");
         }
@@ -151,68 +152,18 @@ public class OverviewFragment extends Fragment {
     }
 
 
-    ////RecyclerView swipe gesture
+    //RecyclerView swipe gesture
     private void createRecyclerViewSwipe() {
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-                0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView,
-                                  @NonNull RecyclerView.ViewHolder viewHolder,
-                                  @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ExpenseRecyclerItemTouchHelper(getActivity()) {
             //Swipe gesture listener
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 deleteItem(viewHolder.getAdapterPosition());
             }
-
-            //Draw background with icon for recyclerView swipe gesture
-            @Override
-            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-                                    @NonNull RecyclerView.ViewHolder viewHolder,
-                                    float dX, float dY, int actionState,
-                                    boolean isCurrentlyActive) {
-
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                View itemView = viewHolder.itemView;
-
-                Drawable background = ContextCompat.getDrawable(getActivity(), R.drawable.shape_rounded_rectangle);
-                background.setTint(Color.parseColor("#FF432C"));
-                background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getRight(), itemView.getBottom());
-
-                Drawable icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete);
-                icon.setTint(Color.WHITE);
-
-                int iconMargin = itemView.getHeight() / 4;
-                int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-                int iconBottom = iconTop + icon.getIntrinsicHeight();
-                int iconLeft, iconRight;
-
-                if (dX > 0) { // Swiping to the right
-                    iconLeft = itemView.getLeft() + iconMargin;
-                    iconRight = iconLeft + icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-
-                } else if (dX < 0) { // Swiping to the left
-                    iconRight = itemView.getRight() - iconMargin;
-                    iconLeft = iconRight - icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-
-                } else { // view is unSwiped
-                    background.setBounds(0, 0, 0, 0);
-                }
-
-                background.draw(c);
-                icon.draw(c);
-            }
         });
 
         //Attach itemTouchHelper to recyclerView
         itemTouchHelper.attachToRecyclerView(recyclerView);
-
     }
 
 

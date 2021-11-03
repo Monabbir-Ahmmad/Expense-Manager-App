@@ -3,14 +3,42 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_add.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_amount.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_app_logo.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_arrow_sort.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_asset_1.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_bills.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_calendar.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_close.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_clothes.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_delete.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_education.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_entertainment.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_feedback.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_filter.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_finance.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_food.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_health.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_housing.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_misc.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_no_data.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_note.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_overview.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_parenting.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_personal_care.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_personal_vehicle.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_pet.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_service.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_settings.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_shopping.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_statistics.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_tax.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_time.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_transport.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/ic_travel.xml" value="0.3828125" />
+        <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/drawable/shape_rounded_rectangle.xml" value="0.3828125" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/layout/activity_data_input.xml" value="0.3574074074074074" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/layout/activity_main.xml" value="0.3574074074074074" />
         <entry key="..\:/Software engineering/GitHub/Expense-Manager-App/Hishab/app/src/main/res/layout/activity_settings.xml" value="0.3574074074074074" />

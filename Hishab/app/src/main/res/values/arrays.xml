@@ -72,24 +72,24 @@
 
     <!-- Color array for pie chart -->
     <array name="colorArray">
-        <item>#005EBD</item>
         <item>#1488FF</item>
-        <item>#00BCD4</item>
-        <item>#00897B</item>
-        <item>#43A047</item>
-        <item>#4DCA52</item>
-        <item>#8BC34A</item>
-        <item>#B9D636</item>
-        <item>#FACE30</item>
-        <item>#FF8400</item>
-        <item>#F44336</item>
-        <item>#FD4583</item>
-        <item>#9C27B0</item>
-        <item>#7847FF</item>
+        <item>#005EBD</item>
+        <item>#4AB7BF</item>
+        <item>#00737C</item>
+        <item>#5EB548</item>
+        <item>#3D752F</item>
+        <item>#BED634</item>
+        <item>#7B8E13</item>
+        <item>#E8C827</item>
+        <item>#977E00</item>
+        <item>#F58729</item>
+        <item>#A55115</item>
+        <item>#DA4236</item>
+        <item>#AA2F23</item>
+        <item>#B544C3</item>
+        <item>#7E1A8A</item>
+        <item>#7E57C2</item>
         <item>#5E35B1</item>
-        <item>#607D8B</item>
-        <item>#9E9E9E</item>
-        <item>#795548</item>
     </array>
 
     <!-- Theme preference entries -->

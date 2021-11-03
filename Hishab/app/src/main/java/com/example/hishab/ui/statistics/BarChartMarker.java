@@ -19,6 +19,7 @@ public class BarChartMarker extends MarkerView {
     private final TextView textView;
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
     private final String currency;
+
     //Constructor
     public BarChartMarker(Context context) {
         super(context, R.layout.marker_view);

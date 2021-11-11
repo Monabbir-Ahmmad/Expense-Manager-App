@@ -19,7 +19,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/bgColor</item>
         <item name="android:windowLightStatusBar">false</item>
 
-        <!-- my custom colors. -->
+        <!-- Custom colors. -->
         <item name="bgColor">@color/dark_black</item>
         <item name="colorBlackWhite">@color/white</item>
         <item name="surfaceColor">@color/coal_black</item>

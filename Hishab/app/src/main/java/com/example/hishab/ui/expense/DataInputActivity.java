@@ -140,7 +140,7 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
 
     //This creates the RecyclerView
     private void createRecyclerView() {
-        for (String s : getResources().getStringArray(R.array.categoryArray)) {
+        for (String s : getResources().getStringArray(R.array.expenseCategoryArray)) {
             DataItem dataItem = new DataItem(this);
             dataItem.setCategory(s);
             dataSet.add(dataItem);
@@ -165,7 +165,7 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
     private void setViewsUpdate() {
         long timestamp = getIntent().getLongExtra("timestamp", 0);
         category = getIntent().getStringExtra("category");
-        int pos = Arrays.asList(getResources().getStringArray(R.array.categoryArray)).indexOf(category);
+        int pos = Arrays.asList(getResources().getStringArray(R.array.expenseCategoryArray)).indexOf(category);
         try {
             recyclerView.scrollToPosition(pos);
             recyclerView.post(() -> Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(pos)).itemView.performClick());

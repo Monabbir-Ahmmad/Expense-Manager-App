@@ -22,16 +22,14 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/button_pieChart_sort"
+            android:id="@+id/grpBtn_pieChart_sort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:weightSum="3"
             app:checkedButton="@+id/btn_week"
             app:selectionRequired="true"
-            app:singleSelection="true"
-
-            >
+            app:singleSelection="true">
 
             <Button
                 android:id="@+id/btn_week"
@@ -39,8 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Week"
-                android:textAllCaps="false" />
+                android:text="Week" />
 
             <Button
                 android:id="@+id/btn_month"
@@ -48,8 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Month"
-                android:textAllCaps="false" />
+                android:text="Month" />
 
             <Button
                 android:id="@+id/btn_year"
@@ -57,8 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Year"
-                android:textAllCaps="false" />
+                android:text="Year" />
 
         </com.google.android.material.button.MaterialButtonToggleGroup>
 

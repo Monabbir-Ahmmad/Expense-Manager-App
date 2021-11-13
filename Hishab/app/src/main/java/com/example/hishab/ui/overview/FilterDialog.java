@@ -75,7 +75,7 @@ public class FilterDialog extends AppCompatDialogFragment {
         //This is the category dropdown
         ArrayList<String> category = new ArrayList<>();
         category.add("All");
-        category.addAll(Arrays.asList(getResources().getStringArray(R.array.categoryArray)));
+        category.addAll(Arrays.asList(getResources().getStringArray(R.array.expenseCategoryArray)));
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getActivity(), R.layout.layout_dropdown_filter, category);
         filterCategory.setText(categoryAdapter.getItem(0), false);
         filterCategory.setAdapter(categoryAdapter);

@@ -22,8 +22,8 @@ public class DataItem {
     //Constructor
     public DataItem(Context context) {
         this.context = context;
-        categoryArray = context.getResources().getStringArray(R.array.categoryArray);
-        iconArray = context.getResources().obtainTypedArray(R.array.iconArray);
+        categoryArray = context.getResources().getStringArray(R.array.expenseCategoryArray);
+        iconArray = context.getResources().obtainTypedArray(R.array.expenseIconArray);
     }
 
 

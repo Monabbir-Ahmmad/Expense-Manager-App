@@ -79,7 +79,7 @@
                 android:layout_marginTop="16dp"
                 android:hint="@string/note"
                 app:endIconMode="clear_text"
-                app:helperText="Add description"
+                app:helperText="Add short note"
                 app:helperTextEnabled="true"
                 app:startIconDrawable="@drawable/ic_note">
 

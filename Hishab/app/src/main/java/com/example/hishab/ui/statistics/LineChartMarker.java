@@ -25,7 +25,7 @@ public class LineChartMarker extends MarkerView {
     private final long startTimestamp;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd", Locale.getDefault());
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
-    private final TypedValue colorPrimary, surfaceColor;
+    private final TypedValue colorPrimary, bgColor;
     private final String currency;
 
 
@@ -39,8 +39,8 @@ public class LineChartMarker extends MarkerView {
 
         colorPrimary = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.colorPrimary, colorPrimary, true);
-        surfaceColor = new TypedValue();
-        getContext().getTheme().resolveAttribute(R.attr.surfaceColor, surfaceColor, true);
+        bgColor = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.bgColor, bgColor, true);
         currency = PreferenceManager.getDefaultSharedPreferences(context).getString("currency", "$");
     }
 
@@ -57,14 +57,15 @@ public class LineChartMarker extends MarkerView {
     @Override
     public void draw(Canvas canvas, float posX, float posY) {
         Paint paint = new Paint();
+
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-        paint.setColor(surfaceColor.data);
-        canvas.drawCircle(posX, posY, 12f, paint);
-
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(6f);
         paint.setColor(colorPrimary.data);
+        canvas.drawCircle(posX, posY, 18f, paint);
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+        paint.setColor(bgColor.data);
         canvas.drawCircle(posX, posY, 12f, paint);
 
         if (posY >= getChartView().getHeight() / 2) { //When value in above chart center

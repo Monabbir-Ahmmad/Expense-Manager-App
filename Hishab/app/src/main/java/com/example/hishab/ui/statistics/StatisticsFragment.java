@@ -81,7 +81,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         lineChart = view.findViewById(R.id.lineChart);
         barChart = view.findViewById(R.id.barChart);
         btnLineSort = view.findViewById(R.id.button_lineChart_sort);
-        btnPieSort = view.findViewById(R.id.button_pieChart_sort);
+        btnPieSort = view.findViewById(R.id.grpBtn_pieChart_sort);
         btnBarSort = view.findViewById(R.id.button_barChart_sort);
         tvDailyAvg = view.findViewById(R.id.textView_dailyAvg);
         tvMonthlyTotal = view.findViewById(R.id.textView_monthlyTotal);
@@ -180,7 +180,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
         long startTime = 0, endTime = 0;
         float categorySum, totalExpense = 0;
-        String[] category = getResources().getStringArray(R.array.categoryArray);
+        String[] expenseCategoryArray = getResources().getStringArray(R.array.expenseCategoryArray);
 
         if (choice == 0) {
             calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
@@ -202,7 +202,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         }
 
         //This adds the values of each category into the PieEntry
-        for (String label : category) {
+        for (String label : expenseCategoryArray) {
             categorySum = databaseHelper.getFilteredSum(label, startTime, endTime);
             totalExpense += categorySum;
             if (categorySum > 0)
@@ -502,8 +502,10 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         yAxisLeft.setValueFormatter(new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
-                if (value >= 1000 && lineDataSet.getYMax() >= 2000) {
-                    return Math.round(value / 1000) + "k";
+                if (value >= 1000000) {
+                    return Math.round(value / 1000000) + "M";
+                } else if (value >= 1000) {
+                    return Math.round(value / 1000) + "K";
                 }
                 return decimalFormat.format(value);
             }
@@ -595,8 +597,10 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         yAxisLeft.setValueFormatter(new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
-                if (value >= 1000 && barDataSet.getYMax() >= 2000) {
-                    return Math.round(value / 1000) + "k";
+                if (value >= 1000000) {
+                    return Math.round(value / 1000000) + "M";
+                } else if (value >= 1000) {
+                    return Math.round(value / 1000) + "K";
                 }
                 return decimalFormat.format(value);
             }
@@ -615,10 +619,11 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
-                return xAxisLabels[(int) value];
+                if (value >= 0)
+                    return xAxisLabels[(int) value % xAxisLabels.length];
+                return "";
             }
         });
-
 
         //Y axis left
         YAxis yAxisRight = barChart.getAxisRight();

@@ -72,7 +72,7 @@ public class LocalBackupDB {
             String[] nextLine = csvReader.readNext();
 
             DateTimeUtil dateTimeUtil = new DateTimeUtil();
-            List<String> categoryArray = Arrays.asList(context.getResources().getStringArray(R.array.categoryArray));
+            List<String> categoryArray = Arrays.asList(context.getResources().getStringArray(R.array.expenseCategoryArray));
 
             //Read each row in the file
             while ((nextLine = csvReader.readNext()) != null) {

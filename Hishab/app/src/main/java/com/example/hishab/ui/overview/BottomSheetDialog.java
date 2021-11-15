@@ -49,7 +49,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         DateTimeUtil dateTimeUtil = new DateTimeUtil();
         String currency = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("currency", "$");
 
-        tvCategory.setText(dataItem.getCategory());
+        tvCategory.setText(String.format("%s - %s", dataItem.getTransactionType(), dataItem.getCategory()));
         tvAmount.setText(String.format("%s%s", currency, decimalFormat.format(dataItem.getAmount())));
         tvDate.setText(dateTimeUtil.getDate(dataItem.getTimestamp()));
         tvTime.setText(dateTimeUtil.getTime(dataItem.getTimestamp()));
@@ -60,6 +60,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             Intent intent = new Intent(getActivity(), DataInputActivity.class);
             intent.putExtra("update", true);
             intent.putExtra("id", dataItem.getId());
+            intent.putExtra("transactionType", dataItem.getTransactionType());
             intent.putExtra("category", dataItem.getCategory());
             intent.putExtra("icon", dataItem.getIcon());
             intent.putExtra("amount", String.valueOf(dataItem.getAmount()));

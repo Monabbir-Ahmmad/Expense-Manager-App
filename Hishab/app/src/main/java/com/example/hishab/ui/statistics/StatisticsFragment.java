@@ -17,6 +17,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.hishab.DateTimeUtil;
 import com.example.hishab.R;
+import com.example.hishab.data.DataItem;
 import com.example.hishab.database.DatabaseHelper;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
@@ -59,8 +60,8 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     private LineChart lineChart;
     private BarChart barChart;
     private Button btnLineSort, btnBarSort;
-    private TextView tvDailyAvg, tvMonthlyTotal, tvMonthAvg, tvYearlyTotal;
-    private MaterialButtonToggleGroup btnPieSort;
+    private TextView tvDailyAvgEx, tvMonthlyTotalEx, tvMonthAvgEx, tvMonthAvgIn, tvYearlyTotalEx, tvYearlyTotalIn;
+    private MaterialButtonToggleGroup grpBtnPieSort, grpBtnPieTransactionType;
     private DatabaseHelper databaseHelper;
     private TypedValue colorBlackWhite, colorPrimary;
     private String currency;
@@ -81,12 +82,15 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         lineChart = view.findViewById(R.id.lineChart);
         barChart = view.findViewById(R.id.barChart);
         btnLineSort = view.findViewById(R.id.button_lineChart_sort);
-        btnPieSort = view.findViewById(R.id.grpBtn_pieChart_sort);
+        grpBtnPieSort = view.findViewById(R.id.grpBtn_pieChart_sort);
+        grpBtnPieTransactionType = view.findViewById(R.id.grpBtn_pie_transactionType);
         btnBarSort = view.findViewById(R.id.button_barChart_sort);
-        tvDailyAvg = view.findViewById(R.id.textView_dailyAvg);
-        tvMonthlyTotal = view.findViewById(R.id.textView_monthlyTotal);
-        tvMonthAvg = view.findViewById(R.id.textView_monthlyAvg);
-        tvYearlyTotal = view.findViewById(R.id.textView_yearlyTotal);
+        tvDailyAvgEx = view.findViewById(R.id.textView_dailyAvg);
+        tvMonthlyTotalEx = view.findViewById(R.id.textView_monthlyTotal);
+        tvMonthAvgEx = view.findViewById(R.id.textView_monthlyAvgEx);
+        tvMonthAvgIn = view.findViewById(R.id.textView_monthlyAvgIn);
+        tvYearlyTotalEx = view.findViewById(R.id.textView_yearlyTotalEx);
+        tvYearlyTotalIn = view.findViewById(R.id.textView_yearlyTotalIn);
 
 
         databaseHelper = new DatabaseHelper(getActivity());
@@ -101,21 +105,18 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
         btnLineSort.setOnClickListener(this);
         btnBarSort.setOnClickListener(this);
-        btnPieSort.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                if (checkedId == R.id.btn_week) {
-                    initPieChart(0);
-                } else if (checkedId == R.id.btn_month) {
-                    initPieChart(1);
-                } else if (checkedId == R.id.btn_year) {
-                    initPieChart(2);
-                }
-            }
+        grpBtnPieTransactionType.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked)
+                initPieChart(checkedId, grpBtnPieSort.getCheckedButtonId());
+        });
+        grpBtnPieSort.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked)
+                initPieChart(grpBtnPieTransactionType.getCheckedButtonId(), checkedId);
         });
 
         Calendar calendar = Calendar.getInstance();
 
-        initPieChart(0);
+        initPieChart(grpBtnPieTransactionType.getCheckedButtonId(), grpBtnPieSort.getCheckedButtonId());
 
         btnLineSort.setText(monthYearFormat.format(calendar.getTime()));
         initLineChart(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
@@ -166,7 +167,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
 
     //This sets the data into the pie chart
-    private void initPieChart(int choice) {
+    private void initPieChart(int transactionTypeId, int choiceId) {
         //Clear chart before updating data
         pieChart.clear();
 
@@ -180,21 +181,30 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
         long startTime = 0, endTime = 0;
         float categorySum, totalExpense = 0;
-        String[] expenseCategoryArray = getResources().getStringArray(R.array.expenseCategoryArray);
+        String transactionType = null;
+        String[] categoryArray = null;
 
-        if (choice == 0) {
+        if (transactionTypeId == R.id.btn_pie_ex) {
+            categoryArray = getResources().getStringArray(R.array.expenseCategoryArray);
+            transactionType = DataItem.EXPENSE;
+        } else if (transactionTypeId == R.id.btn_pie_in) {
+            categoryArray = getResources().getStringArray(R.array.incomeCategoryArray);
+            transactionType = DataItem.INCOME;
+        }
+
+        if (choiceId == R.id.btn_pie_week) {
             calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
             startTime = calendar.getTimeInMillis();
             calendar.add(Calendar.DAY_OF_WEEK, 6);
             endTime = calendar.getTimeInMillis() + DateTimeUtil.DAY_IN_MS - 1000L;
 
-        } else if (choice == 1) {
+        } else if (choiceId == R.id.btn_pie_month) {
             calendar.set(Calendar.DAY_OF_MONTH, 1);
             startTime = calendar.getTimeInMillis();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
             endTime = calendar.getTimeInMillis() + DateTimeUtil.DAY_IN_MS - 1000L;
 
-        } else if (choice == 2) {
+        } else if (choiceId == R.id.btn_pie_year) {
             calendar.set(Calendar.DAY_OF_YEAR, 1);
             startTime = calendar.getTimeInMillis();
             calendar.set(Calendar.DAY_OF_YEAR, calendar.getActualMaximum(Calendar.DAY_OF_YEAR));
@@ -202,12 +212,11 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         }
 
         //This adds the values of each category into the PieEntry
-        for (String label : expenseCategoryArray) {
-            categorySum = databaseHelper.getFilteredSum(label, startTime, endTime);
+        for (String category : categoryArray) {
+            categorySum = databaseHelper.getFilteredSum(transactionType, category, startTime, endTime);
             totalExpense += categorySum;
             if (categorySum > 0)
-                pieEntryArray.add(new PieEntry(categorySum, label));
-
+                pieEntryArray.add(new PieEntry(categorySum, category));
         }
 
         if (pieEntryArray.size() > 0) { //Insert PieEntries into the PieDataSet and create PieData from PieDataSet
@@ -243,7 +252,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
         int numOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         long dayStart, dayEnd;
-        float dailySum, dailyAverage, monthlyTotal = 0;
+        float dailyExpenseSum, dailyAverageExpense, monthlyTotalExpense = 0;
         long lineStartPosX = calendar.getTimeInMillis();
 
         for (int i = 1; i <= numOfDays; i++) {
@@ -252,17 +261,17 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             dayStart = calendar.getTimeInMillis();
             dayEnd = dayStart + DateTimeUtil.DAY_IN_MS - 1000L;
 
-            dailySum = databaseHelper.getFilteredSum("All", dayStart, dayEnd);
-            monthlyTotal += dailySum;
+            dailyExpenseSum = databaseHelper.getFilteredSum(DataItem.EXPENSE, "All", dayStart, dayEnd);
+            monthlyTotalExpense += dailyExpenseSum;
 
-            if (dailySum > 0)
-                lineEntryArray.add(new Entry(i - 1, dailySum));
+            if (dailyExpenseSum > 0)
+                lineEntryArray.add(new Entry(i - 1, dailyExpenseSum));
         }
 
-        dailyAverage = monthlyTotal / numOfDays;
+        dailyAverageExpense = monthlyTotalExpense / numOfDays;
 
-        tvDailyAvg.setText(String.format("%s%s", currency, decimalFormat.format(dailyAverage)));
-        tvMonthlyTotal.setText(String.format("%s%s", currency, decimalFormat.format(monthlyTotal)));
+        tvDailyAvgEx.setText(String.format("%s%s", currency, decimalFormat.format(dailyAverageExpense)));
+        tvMonthlyTotalEx.setText(String.format("%s%s", currency, decimalFormat.format(monthlyTotalExpense)));
 
         if (lineEntryArray.size() > 0) { //Insert LineEntries into the LineDataSet and create LineData from LineDataSet
             LineDataSet lineDataSet = new LineDataSet(lineEntryArray, null);
@@ -285,7 +294,9 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         //Clear chart before updating data
         barChart.clear();
 
-        ArrayList<BarEntry> barEntryArray = new ArrayList<>();
+        ArrayList<BarEntry> barEntryExpenseArray = new ArrayList<>();
+        ArrayList<BarEntry> barEntryIncomeArray = new ArrayList<>();
+
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, selectedYear);
@@ -295,7 +306,8 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         calendar.clear(Calendar.MILLISECOND);
 
         long monthStart, monthEnd;
-        float monthlySum, monthlyAverage, yearlyTotal = 0;
+        float monthlyExpenseSum, monthlyAverageExpense, yearlyTotalExpense = 0;
+        float monthlyIncomeSum, monthlyAverageIncome, yearlyTotalIncome = 0;
         boolean dataFound = false;
 
         for (int i = 0; i < 12; i++) {
@@ -307,27 +319,37 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
             monthEnd = calendar.getTimeInMillis() + DateTimeUtil.DAY_IN_MS - 1000L;
 
-            monthlySum = databaseHelper.getFilteredSum("All", monthStart, monthEnd);
-            yearlyTotal += monthlySum;
+            //Expense
+            monthlyExpenseSum = databaseHelper.getFilteredSum(DataItem.EXPENSE, "All", monthStart, monthEnd);
+            yearlyTotalExpense += monthlyExpenseSum;
+            barEntryExpenseArray.add(new BarEntry(i, monthlyExpenseSum));
 
-            barEntryArray.add(new BarEntry(i, monthlySum));
+            //Income
+            monthlyIncomeSum = databaseHelper.getFilteredSum(DataItem.INCOME, "All", monthStart, monthEnd);
+            yearlyTotalIncome += monthlyIncomeSum;
+            barEntryIncomeArray.add(new BarEntry(i, monthlyIncomeSum));
 
-            if (monthlySum > 0 && !dataFound)
+            if ((monthlyExpenseSum > 0 || monthlyIncomeSum > 0) && !dataFound)
                 dataFound = true;
 
         }
 
-        monthlyAverage = yearlyTotal / 12;
+        monthlyAverageExpense = yearlyTotalExpense / 12;
+        monthlyAverageIncome = yearlyTotalIncome / 12;
 
-        tvMonthAvg.setText(String.format("%s%s", currency, decimalFormat.format(monthlyAverage)));
-        tvYearlyTotal.setText(String.format("%s%s", currency, decimalFormat.format(yearlyTotal)));
+        tvMonthAvgIn.setText(String.format("Income: %s%s", currency, decimalFormat.format(monthlyAverageIncome)));
+        tvMonthAvgEx.setText(String.format("Expense: %s%s", currency, decimalFormat.format(monthlyAverageExpense)));
+
+        tvYearlyTotalIn.setText(String.format("Income: %s%s", currency, decimalFormat.format(yearlyTotalIncome)));
+        tvYearlyTotalEx.setText(String.format("Expense: %s%s", currency, decimalFormat.format(yearlyTotalExpense)));
 
         if (dataFound) { //Insert BarEntries into BarDataSet and create BarData from BarDataSet
-            BarDataSet barDataSet = new BarDataSet(barEntryArray, null);
-            BarData barData = new BarData(barDataSet);
+            BarDataSet barExpenseDataSet = new BarDataSet(barEntryExpenseArray, DataItem.EXPENSE);
+            BarDataSet barIncomeDataSet = new BarDataSet(barEntryIncomeArray, DataItem.INCOME);
+            BarData barData = new BarData(barIncomeDataSet, barExpenseDataSet);
 
             barChart.setData(barData);
-            renderBarChart(barDataSet, barData);
+            renderBarChart(barExpenseDataSet, barIncomeDataSet, barData);
         }
 
         //No data text
@@ -539,7 +561,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         lineChart.animateY(1000);
 
         //View port offset
-        lineChart.setExtraOffsets(0, 0, 10f, 10f);
+        lineChart.setExtraOffsets(0, 0, 0, 10f);
 
         //Refresh chart
         lineChart.notifyDataSetChanged();
@@ -548,7 +570,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     }
 
     //This creates the bar chart
-    private void renderBarChart(BarDataSet barDataSet, BarData barData) {
+    private void renderBarChart(BarDataSet barExpenseDataSet, BarDataSet barIncomeDataSet, BarData barData) {
         //Marker view
         BarChartMarker barChartMarker = new BarChartMarker(getActivity());
         barChartMarker.setChartView(barChart);
@@ -563,12 +585,15 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         barChart.setFitBars(true);
 
         //Bar width
-        barData.setBarWidth(0.3f);
+        barData.setBarWidth(0.25f);
+        barData.groupBars(0, 0.4f, 0.05f);
 
         //Bar color
-        barDataSet.setColor(colorPrimary.data);
-        barDataSet.setHighLightAlpha(50);
-        barDataSet.setDrawValues(false);
+        barData.setDrawValues(false);
+        barExpenseDataSet.setColor(getActivity().getColor(R.color.light_red));
+        barIncomeDataSet.setColor(getActivity().getColor(R.color.light_green));
+        barExpenseDataSet.setHighLightAlpha(50);
+        barIncomeDataSet.setHighLightAlpha(50);
 
 
         //Description of the chart
@@ -583,9 +608,9 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         YAxis yAxisLeft = barChart.getAxisLeft();
         yAxisLeft.setEnabled(true);
         yAxisLeft.setDrawAxisLine(false);
-        if (barDataSet.getYMax() >= 2000)
+        if (barExpenseDataSet.getYMax() >= 2000)
             yAxisLeft.setGranularity(1000);
-        else if (barDataSet.getYMax() >= 1000)
+        else if (barExpenseDataSet.getYMax() >= 1000)
             yAxisLeft.setGranularity(100);
         else
             yAxisLeft.setGranularity(10);
@@ -613,6 +638,9 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1);
         xAxis.setLabelCount(12);
+        xAxis.setAxisMinimum(0);
+        xAxis.setAxisMaximum(12);
+        xAxis.setCenterAxisLabels(true);
         xAxis.setTextColor(colorBlackWhite.data);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         String[] xAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -633,7 +661,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         barChart.animateY(1000);
 
         //View port offset
-        barChart.setExtraOffsets(0, 0, 10f, 10f);
+        barChart.setExtraOffsets(0, 0, 0, 10f);
 
         //Refresh chart
         barChart.notifyDataSetChanged();

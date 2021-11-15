@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- Array for expense category names -->
     <string-array name="expenseCategoryArray">
         <item>Bills</item>
@@ -23,7 +22,6 @@
         <item>Travel</item>
     </string-array>
 
-
     <!-- Array for income category names -->
     <string-array name="incomeCategoryArray">
         <item>Allowance</item>
@@ -35,7 +33,6 @@
         <item>Royalty</item>
         <item>Salary</item>
     </string-array>
-
 
     <!-- Array for expense category icons -->
     <integer-array name="expenseIconArray">
@@ -59,19 +56,17 @@
         <item>@drawable/ic_travel</item>
     </integer-array>
 
-
     <!-- Array for income category icons -->
     <integer-array name="incomeIconArray">
-        <item>@drawable/ic_bills</item>
-        <item>@drawable/ic_clothes</item>
-        <item>@drawable/ic_education</item>
-        <item>@drawable/ic_entertainment</item>
-        <item>@drawable/ic_finance</item>
-        <item>@drawable/ic_food</item>
-        <item>@drawable/ic_health</item>
-        <item>@drawable/ic_housing</item>
+        <item>@drawable/ic_allowance</item>
+        <item>@drawable/ic_commission</item>
+        <item>@drawable/ic_interest</item>
+        <item>@drawable/ic_other_income</item>
+        <item>@drawable/ic_profit</item>
+        <item>@drawable/ic_rental</item>
+        <item>@drawable/ic_royalty</item>
+        <item>@drawable/ic_salary</item>
     </integer-array>
-
 
     <!-- Array for sort by -->
     <string-array name="sortByArray">
@@ -81,7 +76,6 @@
         <item>Amount: ASC</item>
         <item>Amount: DESC</item>
     </string-array>
-
 
     <!-- Array for sort by -->
     <string-array name="monthsArray">
@@ -98,7 +92,6 @@
         <item>November</item>
         <item>December</item>
     </string-array>
-
 
     <!-- Color array for pie chart -->
     <array name="colorArray">
@@ -122,7 +115,6 @@
         <item>#5E35B1</item>
     </array>
 
-
     <!-- Theme preference entries -->
     <string-array name="theme_entries">
         <item>System default</item>
@@ -135,7 +127,6 @@
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-
 
     <!-- Currency preference entries -->
     <string-array name="currency_entries">

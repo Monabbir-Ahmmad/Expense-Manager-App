@@ -23,6 +23,7 @@
         <item name="bgColor">@color/dark_black</item>
         <item name="colorBlackWhite">@color/white</item>
         <item name="surfaceColor">@color/coal_black</item>
+        <item name="colorPrimaryAlpha">@color/blue_300_alpha</item>
 
         <!-- Bottom sheet style. -->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class OverviewFragment extends Fragment {
 
-    private TextView tvTotalExpense, tvRecordsFound;
+    private TextView tvTotalExpense, tvTotalIncome;
     private LinearLayout noDataLayout;
     private AppBarLayout appBarLayout;
     private RecyclerView recyclerView;
@@ -51,7 +51,7 @@ public class OverviewFragment extends Fragment {
 
         //Find views
         tvTotalExpense = view.findViewById(R.id.textView_totalExpense);
-        tvRecordsFound = view.findViewById(R.id.textView_recordsFound);
+        tvTotalIncome = view.findViewById(R.id.textView_totalIncome);
         recyclerView = view.findViewById(R.id.recyclerView);
         noDataLayout = view.findViewById(R.id.noDataLayout);
         appBarLayout = view.findViewById(R.id.appBarLayout_overview);
@@ -60,7 +60,7 @@ public class OverviewFragment extends Fragment {
         dataSet = databaseHelper.getAllData();
 
         //This calculates the top panel values on startup
-        refreshOtherViews();
+        refreshTopViews();
 
         //This creates the RecyclerView
         createRecyclerView();
@@ -83,12 +83,12 @@ public class OverviewFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_filter) { //Open filter dialog
             FilterDialog filterDialog = new FilterDialog();
-            filterDialog.setOnPositiveButtonClickListener((category, sortBy, startTimestamp, endTimestamp) -> {
+            filterDialog.setOnPositiveButtonClickListener((categoryArray, sortBy, startTimestamp, endTimestamp) -> {
                 dataSet.clear();
-                dataSet.addAll(databaseHelper.getFilteredData(category, sortBy, startTimestamp, endTimestamp));
+                dataSet.addAll(databaseHelper.getFilteredData(categoryArray, sortBy, startTimestamp, endTimestamp));
                 recyclerAdapter.notifyDataSetChanged();
                 appBarLayout.setExpanded(true, true);
-                refreshOtherViews();
+                refreshTopViews();
             });
             filterDialog.show(getActivity().getSupportFragmentManager(), "FilterDialog");
         }
@@ -102,7 +102,7 @@ public class OverviewFragment extends Fragment {
         DataItem dataItem = dataSet.get(position);
         dataSet.remove(position);
         recyclerAdapter.notifyItemRemoved(position);
-        refreshOtherViews();
+        refreshTopViews();
         databaseHelper.deleteData(dataItem.getId(), 1);
 
         //SnackBar for undoing item delete
@@ -110,25 +110,28 @@ public class OverviewFragment extends Fragment {
             dataSet.add(position, dataItem);
             recyclerAdapter.notifyItemInserted(position);
             recyclerView.smoothScrollToPosition(position);
-            refreshOtherViews();
+            refreshTopViews();
             databaseHelper.deleteData(dataItem.getId(), 0);
         }).show();
     }
 
 
     //This calculates the top panel values and show no data found view if needed
-    private void refreshOtherViews() {
-        double totalExpense = 0;
+    private void refreshTopViews() {
+        double totalExpense = 0, totalIncome = 0;
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
         String currency = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("currency", "$");
 
-        for (int i = 0; i < dataSet.size(); i++) {
-            totalExpense += dataSet.get(i).getAmount();
+        for (DataItem dataItem : dataSet) {
+            if (dataItem.getTransactionType().equals(DataItem.EXPENSE))
+                totalExpense += dataItem.getAmount();
+            else if (dataItem.getTransactionType().equals(DataItem.INCOME))
+                totalIncome += dataItem.getAmount();
         }
 
         //This will set the current total expense
         tvTotalExpense.setText(String.format("%s%s", currency, decimalFormat.format(totalExpense)));
-        tvRecordsFound.setText(String.valueOf(dataSet.size()));
+        tvTotalIncome.setText(String.format("%s%s", currency, decimalFormat.format(totalIncome)));
 
         //Show recycler view or no data found based on data found or not
         recyclerView.setVisibility(dataSet.isEmpty() ? View.GONE : View.VISIBLE);

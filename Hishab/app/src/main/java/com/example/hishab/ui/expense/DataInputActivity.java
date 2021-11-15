@@ -19,6 +19,7 @@ import com.example.hishab.MainActivity;
 import com.example.hishab.R;
 import com.example.hishab.data.DataItem;
 import com.example.hishab.database.DatabaseHelper;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -38,11 +39,11 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
     private final ArrayList<DataItem> dataSet = new ArrayList<>();
     private TextInputEditText etAmount, etNote;
     private AutoCompleteTextView etDate, etTime;
+    private MaterialButtonToggleGroup grpBtnTransactionType;
     private RecyclerView recyclerView;
-    private CategoryRecyclerAdapter recyclerAdapter;
     private DateTimeUtil dateTimeUtil;
     private boolean isUpdate;
-    private String category = null;
+    private String transactionType = DataItem.EXPENSE, category = null;
 
 
     @Override
@@ -55,10 +56,11 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
 
         //Find views
         Toolbar toolbar = findViewById(R.id.toolbar_dataInput);
-        etAmount = findViewById(R.id.editText_amount);
-        etNote = findViewById(R.id.editText_note);
-        etDate = findViewById(R.id.editText_date);
-        etTime = findViewById(R.id.editText_time);
+        grpBtnTransactionType = findViewById(R.id.grpBtn_transactionType);
+        etAmount = findViewById(R.id.et_amount);
+        etNote = findViewById(R.id.et_note);
+        etDate = findViewById(R.id.et_date);
+        etTime = findViewById(R.id.et_time);
         recyclerView = findViewById(R.id.horizontal_recyclerview);
 
         //Setup toolbar as action bar
@@ -70,10 +72,24 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
 
         dateTimeUtil = new DateTimeUtil();
 
-        createRecyclerView();
-
         etDate.setOnClickListener(this);
         etTime.setOnClickListener(this);
+
+        grpBtnTransactionType.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == R.id.btn_transactionEx) {
+                    transactionType = DataItem.EXPENSE;
+
+                } else if (checkedId == R.id.btn_transactionIn) {
+                    transactionType = DataItem.INCOME;
+                }
+                category = null;
+                createRecyclerView(transactionType);
+            }
+        });
+
+        //Build recycler view on create to avoid error
+        createRecyclerView(transactionType);
 
         //Set toolbar title and check if it's for record update or not
         if (!isUpdate) { //Add new record
@@ -107,7 +123,7 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         Calendar calendar = Calendar.getInstance();
 
-        if (v.getId() == R.id.editText_date) { // Show date picker
+        if (v.getId() == R.id.et_date) { // Show date picker
             MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select date")
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
@@ -121,7 +137,7 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
                     }
             );
 
-        } else if (v.getId() == R.id.editText_time) { // Show time picker
+        } else if (v.getId() == R.id.et_time) { // Show time picker
             MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_12H)
                     .setHour(calendar.get(Calendar.HOUR_OF_DAY))
@@ -138,37 +154,56 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    //This creates the RecyclerView
-    private void createRecyclerView() {
-        for (String s : getResources().getStringArray(R.array.expenseCategoryArray)) {
+    //This creates the RecyclerView based on transaction type
+    private void createRecyclerView(String transactionType) {
+        dataSet.clear();
+        String[] categoryArray = getResources().getStringArray(transactionType.equals(DataItem.EXPENSE) ?
+                R.array.expenseCategoryArray : R.array.incomeCategoryArray);
+
+        for (String s : categoryArray) {
             DataItem dataItem = new DataItem(this);
             dataItem.setCategory(s);
+            dataItem.setIcon(transactionType, s);
             dataSet.add(dataItem);
         }
 
-        recyclerAdapter = new CategoryRecyclerAdapter(dataSet, this);
+        CategoryRecyclerAdapter recyclerAdapter = new CategoryRecyclerAdapter(dataSet, this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerAdapter.setOnItemClickListener(position -> category = dataSet.get(position).getCategory());
-
     }
 
 
-    //Set expense category, date, time, note on create
+    //For new data, set category, date, time, note on create
     private void setViewsNew() {
+        transactionType = DataItem.EXPENSE;
         etDate.setText(dateTimeUtil.getDate(new Date().getTime()));
         etTime.setText(dateTimeUtil.getTime(new Date().getTime()));
     }
 
 
-    //Set expense category, amount, date, time, note on create to update data
+    //For updating data, set transaction type, category, amount, date, time, note on create
     private void setViewsUpdate() {
-        long timestamp = getIntent().getLongExtra("timestamp", 0);
+        transactionType = getIntent().getStringExtra("transactionType");
+
+        if (transactionType.equals(DataItem.EXPENSE)) {
+            grpBtnTransactionType.check(R.id.btn_transactionEx);
+        } else if (transactionType.equals(DataItem.INCOME)) {
+            grpBtnTransactionType.check(R.id.btn_transactionIn);
+        }
+
         category = getIntent().getStringExtra("category");
-        int pos = Arrays.asList(getResources().getStringArray(R.array.expenseCategoryArray)).indexOf(category);
+        long timestamp = getIntent().getLongExtra("timestamp", 0);
+
+        String[] categoryArray = getResources().getStringArray(transactionType.equals(DataItem.EXPENSE) ?
+                R.array.expenseCategoryArray : R.array.incomeCategoryArray);
+
+        int pos = Arrays.asList(categoryArray).indexOf(category);
         try {
             recyclerView.scrollToPosition(pos);
-            recyclerView.post(() -> Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(pos)).itemView.performClick());
+            recyclerView.post(() -> {
+                Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(pos)).itemView.performClick();
+            });
         } catch (Exception e) {
             Log.e("Category Picker Error", e.getMessage());
         }
@@ -177,13 +212,11 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
         etDate.setText(dateTimeUtil.getDate(timestamp));
         etTime.setText(dateTimeUtil.getTime(timestamp));
         etNote.setText(getIntent().getStringExtra("note"));
-
     }
 
 
-    //This saves data on button click
+    //This saves data on save button click
     private void saveData() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(this);
         String amountText = etAmount.getText().toString();
 
         if (amountText.isEmpty() || Float.parseFloat(amountText) <= 0) { //When amount is invalid
@@ -193,7 +226,7 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(getApplicationContext(), "Please select a category", Toast.LENGTH_SHORT).show();
 
         } else { //When amount is valid and category is selected
-
+            DatabaseHelper databaseHelper = new DatabaseHelper(this);
             float amount = Float.parseFloat(amountText);
             Long timestamp = dateTimeUtil.getTimestamp(etDate.getText().toString(), etTime.getText().toString());
 
@@ -202,18 +235,17 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
 
             //If not update data, insert new data
             if (!isUpdate) {
-                databaseHelper.insertData(category, amount, note, timestamp);
+                databaseHelper.insertData(transactionType, category, amount, note, timestamp);
             }
             //If update, update existing data
             else {
                 int id = getIntent().getIntExtra("id", -1);
-                databaseHelper.updateData(id, category, amount, note, timestamp);
+                databaseHelper.updateData(id, transactionType, category, amount, note, timestamp);
             }
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
 
     }
-
 
 }

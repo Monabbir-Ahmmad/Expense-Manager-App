@@ -56,15 +56,24 @@ public class ExpenseRecyclerAdapter extends RecyclerView.Adapter<ExpenseRecycler
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        holder.imageViewIcon.setImageResource(dataSet.get(position).getIcon());
-        holder.textViewCategory.setText(dataSet.get(position).getCategory());
-        holder.textViewAmount.setText(String.format("%s%s", currency, decimalFormat.format(dataSet.get(position).getAmount())));
-        holder.textViewDateTime.setText(dateTimeUtil.getTimeAgo(dataSet.get(position).getTimestamp()));
+        String symbol = "-";
+        if (dataSet.get(position).getTransactionType().equals(DataItem.INCOME)) {
+            symbol = "+";
+            holder.tvAmount.setTextColor(context.getColor(R.color.light_green));
+        } else if (dataSet.get(position).getTransactionType().equals(DataItem.EXPENSE)) {
+            symbol = "-";
+            holder.tvAmount.setTextColor(context.getColor(R.color.light_red));
+        }
+
+        holder.ivIcon.setImageResource(dataSet.get(position).getIcon());
+        holder.tvCategory.setText(dataSet.get(position).getCategory());
+        holder.tvAmount.setText(String.format("%s%s%s", symbol, currency, decimalFormat.format(dataSet.get(position).getAmount())));
+        holder.tvDateTime.setText(dateTimeUtil.getTimeAgo(dataSet.get(position).getTimestamp()));
         if (StringUtils.isBlank(dataSet.get(position).getNote())) {
-            holder.textViewNote.setVisibility(View.GONE);
+            holder.tvNote.setVisibility(View.GONE);
         } else {
-            holder.textViewNote.setVisibility(View.VISIBLE);
-            holder.textViewNote.setText(String.format("%s", dataSet.get(position).getNote()));
+            holder.tvNote.setVisibility(View.VISIBLE);
+            holder.tvNote.setText(String.format("%s", dataSet.get(position).getNote()));
         }
 
     }
@@ -82,22 +91,19 @@ public class ExpenseRecyclerAdapter extends RecyclerView.Adapter<ExpenseRecycler
     //Inner view holder class
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        public final ImageView imageViewIcon;
-        public final TextView textViewCategory;
-        public final TextView textViewAmount;
-        public final TextView textViewDateTime;
-        public final TextView textViewNote;
+        public final ImageView ivIcon;
+        public final TextView tvCategory, tvAmount, tvDateTime, tvNote;
 
         //Inner classConstructor
         public RecyclerViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
 
             //Find views
-            imageViewIcon = itemView.findViewById(R.id.recycleView_icon);
-            textViewCategory = itemView.findViewById(R.id.recycleView_category);
-            textViewAmount = itemView.findViewById(R.id.recycleView_amount);
-            textViewDateTime = itemView.findViewById(R.id.recycleView_dateTime);
-            textViewNote = itemView.findViewById(R.id.recycleView_note);
+            ivIcon = itemView.findViewById(R.id.rec_listIcon);
+            tvCategory = itemView.findViewById(R.id.rec_listCategory);
+            tvAmount = itemView.findViewById(R.id.rec_listAmount);
+            tvDateTime = itemView.findViewById(R.id.rec_listDateTime);
+            tvNote = itemView.findViewById(R.id.rec_listNote);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {

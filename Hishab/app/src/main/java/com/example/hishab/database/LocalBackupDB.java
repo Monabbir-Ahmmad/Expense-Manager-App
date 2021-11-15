@@ -40,11 +40,12 @@ public class LocalBackupDB {
                 CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(context.getContentResolver().openOutputStream(fileUri, "wt")));
 
                 //The first row are the headers
-                csvWriter.writeNext(new String[]{"CATEGORY", "AMOUNT", "DATE", "TIME", "NOTE"}, true);
+                csvWriter.writeNext(new String[]{"TRANSACTION_TYPE", "CATEGORY", "AMOUNT", "DATE", "TIME", "NOTE"}, true);
 
                 //Write each row in the file
                 for (DataItem dataItem : dataset) {
-                    csvWriter.writeNext(new String[]{dataItem.getCategory(),
+                    csvWriter.writeNext(new String[]{dataItem.getTransactionType(),
+                            dataItem.getCategory(),
                             String.valueOf(dataItem.getAmount()),
                             dateTimeUtil.getDate(dataItem.getTimestamp()),
                             dateTimeUtil.getTime(dataItem.getTimestamp()),
@@ -72,19 +73,22 @@ public class LocalBackupDB {
             String[] nextLine = csvReader.readNext();
 
             DateTimeUtil dateTimeUtil = new DateTimeUtil();
-            List<String> categoryArray = Arrays.asList(context.getResources().getStringArray(R.array.expenseCategoryArray));
+            List<String> categoryArray = new ArrayList<>();
+            categoryArray.addAll(Arrays.asList(context.getResources().getStringArray(R.array.expenseCategoryArray)));
+            categoryArray.addAll(Arrays.asList(context.getResources().getStringArray(R.array.incomeCategoryArray)));
 
             //Read each row in the file
             while ((nextLine = csvReader.readNext()) != null) {
-                String category = nextLine[0];
-                float amount = Float.parseFloat(nextLine[1]);
-                long timestamp = dateTimeUtil.getTimestamp(nextLine[2], nextLine[3]);
+                String transactionType = nextLine[0];
+                String category = nextLine[1];
+                float amount = Float.parseFloat(nextLine[2]);
+                long timestamp = dateTimeUtil.getTimestamp(nextLine[3], nextLine[4]);
                 String note = null;
-                if (nextLine[4].trim().length() > 0)
-                    note = nextLine[4];
+                if (nextLine[5].trim().length() > 0)
+                    note = nextLine[5];
 
                 if (categoryArray.contains(category))
-                    db.insertData(category, amount, note, timestamp);
+                    db.insertData(transactionType, category, amount, note, timestamp);
             }
 
             csvReader.close();

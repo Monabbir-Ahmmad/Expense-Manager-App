@@ -1,8 +1,6 @@
 package com.example.hishab.ui.expense;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +20,6 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
     private final Context context;
     private final ArrayList<DataItem> dataSet;
-    private final TypedValue colorPrimary, bgColor;
     private int checkedPosition = -1;
     private OnItemClickListener listener;
 
@@ -31,10 +28,6 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     public CategoryRecyclerAdapter(ArrayList<DataItem> dataSet, Context context) {
         this.dataSet = dataSet;
         this.context = context;
-        colorPrimary = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorPrimary, colorPrimary, true);
-        bgColor = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.bgColor, bgColor, true);
     }
 
     // Set recycler item click listener
@@ -53,18 +46,15 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        holder.imageViewIcon.setImageResource(dataSet.get(position).getIcon());
-        holder.textViewLabel.setText(dataSet.get(position).getCategory());
+        holder.ivIcon.setImageResource(dataSet.get(position).getIcon());
+        holder.tvLabel.setText(dataSet.get(position).getCategory());
 
         // Clear highlighted items that are not selected
         if (checkedPosition == position) {
-            holder.cardContainer.setCardBackgroundColor(colorPrimary.data);
-            holder.imageViewIcon.setColorFilter(Color.WHITE);
-            holder.textViewLabel.setTextColor(Color.WHITE);
+            holder.cardContainer.setStrokeWidth(5);
         } else {
-            holder.cardContainer.setCardBackgroundColor(bgColor.data);
-            holder.imageViewIcon.setColorFilter(colorPrimary.data);
-            holder.textViewLabel.setTextColor(colorPrimary.data);
+            holder.cardContainer.setStrokeWidth(0);
+
         }
 
     }
@@ -82,8 +72,8 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     //Inner view holder class
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        public final ImageView imageViewIcon;
-        public final TextView textViewLabel;
+        public final ImageView ivIcon;
+        public final TextView tvLabel;
         public final MaterialCardView cardContainer;
 
         //Inner classConstructor
@@ -91,8 +81,8 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
             super(itemView);
 
             //Find views
-            imageViewIcon = itemView.findViewById(R.id.rec_categoryIcon);
-            textViewLabel = itemView.findViewById(R.id.rec_categoryLabel);
+            ivIcon = itemView.findViewById(R.id.rec_categoryIcon);
+            tvLabel = itemView.findViewById(R.id.rec_categoryLabel);
             cardContainer = itemView.findViewById(R.id.rec_categoryContainer);
 
             itemView.setOnClickListener(v -> {
@@ -100,9 +90,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
                     int position = getAdapterPosition();
 
                     // On item click highlight that item
-                    cardContainer.setCardBackgroundColor(colorPrimary.data);
-                    imageViewIcon.setColorFilter(Color.WHITE);
-                    textViewLabel.setTextColor(Color.WHITE);
+                    cardContainer.setStrokeWidth(5);
 
                     if (position != RecyclerView.NO_POSITION && checkedPosition != position) {
                         notifyItemChanged(checkedPosition);

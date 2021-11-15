@@ -28,10 +28,41 @@
             android:orientation="vertical"
             android:paddingBottom="32dp">
 
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/grpBtn_transactionType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:weightSum="2"
+                app:checkedButton="@+id/btn_transactionEx"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <Button
+                    android:id="@+id/btn_transactionEx"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Expense" />
+
+                <Button
+                    android:id="@+id/btn_transactionIn"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Income" />
+
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/category"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
@@ -62,7 +93,7 @@
                 app:startIconDrawable="@drawable/ic_amount">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editText_amount"
+                    android:id="@+id/et_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
@@ -84,7 +115,7 @@
                 app:startIconDrawable="@drawable/ic_note">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editText_note"
+                    android:id="@+id/et_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true" />
@@ -101,7 +132,7 @@
                 app:startIconDrawable="@drawable/ic_calendar">
 
                 <AutoCompleteTextView
-                    android:id="@+id/editText_date"
+                    android:id="@+id/et_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none" />
@@ -118,7 +149,7 @@
                 app:startIconDrawable="@drawable/ic_time">
 
                 <AutoCompleteTextView
-                    android:id="@+id/editText_time"
+                    android:id="@+id/et_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none" />

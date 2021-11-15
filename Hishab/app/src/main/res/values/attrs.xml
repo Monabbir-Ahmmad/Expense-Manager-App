@@ -2,6 +2,7 @@
 <resources>
     <attr name="colorBlackWhite" format="color" />
     <attr name="surfaceColor" format="color" />
+    <attr name="colorPrimaryAlpha" format="color" />
     <attr name="bgColor" format="color" />
 
 </resources>

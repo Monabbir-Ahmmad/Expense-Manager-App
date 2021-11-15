@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
-            android:text="Expense by category"
+            android:text="Transaction by category"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
@@ -27,12 +27,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:weightSum="3"
-            app:checkedButton="@+id/btn_week"
+            app:checkedButton="@+id/btn_pie_week"
             app:selectionRequired="true"
             app:singleSelection="true">
 
             <Button
-                android:id="@+id/btn_week"
+                android:id="@+id/btn_pie_week"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:text="Week" />
 
             <Button
-                android:id="@+id/btn_month"
+                android:id="@+id/btn_pie_month"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 android:text="Month" />
 
             <Button
-                android:id="@+id/btn_year"
+                android:id="@+id/btn_pie_year"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,6 +74,35 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/grpBtn_pie_transactionType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:weightSum="2"
+            app:checkedButton="@+id/btn_pie_ex"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <Button
+                android:id="@+id/btn_pie_ex"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Expense" />
+
+            <Button
+                android:id="@+id/btn_pie_in"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Income" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
         <View
             style="@style/Divider.Horizontal"
             android:layout_marginTop="16dp" />
@@ -82,7 +111,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="horizontal"
             android:padding="16dp">
 
@@ -190,7 +218,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="horizontal"
             android:padding="16dp">
 
@@ -198,7 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Monthly expense"
+                android:text="Monthly Transaction"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
@@ -233,20 +260,31 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView_monthlyAvg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/amount"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                    android:textColor="?attr/colorPrimary" />
+                    android:text="Monthly Average" />
 
                 <TextView
+                    android:id="@+id/textView_monthlyAvgIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:text="Monthly Average" />
+                    android:layout_marginTop="12dp"
+                    android:text="@string/amount"
+                    android:textColor="@color/light_green"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textView_monthlyAvgEx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/amount"
+                    android:textColor="@color/light_red"
+                    android:textSize="16sp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -256,20 +294,31 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView_yearlyTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/amount"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                    android:textColor="?attr/colorPrimary" />
+                    android:text="Yearly Total" />
 
                 <TextView
+                    android:id="@+id/textView_yearlyTotalIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:text="Yearly Total" />
+                    android:layout_marginTop="12dp"
+                    android:text="@string/amount"
+                    android:textColor="@color/light_green"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textView_yearlyTotalEx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/amount"
+                    android:textColor="@color/light_red"
+                    android:textSize="16sp" />
+
             </LinearLayout>
 
         </LinearLayout>

@@ -5,18 +5,21 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.hishab.data.DataItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "ExpenseManager.db";
+    private static final String DATABASE_NAME = "ExpenseManager.db";
     private static final int VERSION_NUMBER = 1;
     private static final String TABLE_NAME = "Transactions";
     private static final String ID = "ID";
+    private static final String TRANSACTION_TYPE = "Transaction_Type";
     private static final String CATEGORY = "Category";
     private static final String AMOUNT = "Amount";
     private static final String NOTE = "Note";
@@ -39,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String createTable = "CREATE TABLE " + TABLE_NAME + " ("
                 + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TRANSACTION_TYPE + " TEXT, "
                 + CATEGORY + " TEXT, "
                 + AMOUNT + " INTEGER, "
                 + NOTE + " TEXT, "
@@ -70,10 +74,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //This inserts data into table
-    public void insertData(String category, float amount, String note, Long timestamp) {
+    public void insertData(String transactionType, String category, float amount, String note, Long timestamp) {
         database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-
+        contentValues.put(TRANSACTION_TYPE, transactionType);
         contentValues.put(CATEGORY, category);
         contentValues.put(AMOUNT, amount);
         contentValues.put(NOTE, note);
@@ -89,14 +93,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //This updates existing data
-    public void updateData(int id, String category, float amount, String note, Long timestamp) {
+    public void updateData(int id, String transactionType, String category, float amount, String note, Long timestamp) {
         database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-
+        contentValues.put(TRANSACTION_TYPE, transactionType);
         contentValues.put(CATEGORY, category);
         contentValues.put(AMOUNT, amount);
         contentValues.put(NOTE, note);
         contentValues.put(TIMESTAMP, timestamp);
+
         long rowID = database.update(TABLE_NAME, contentValues, ID + "= ?", new String[]{String.valueOf(id)});
         database.close();
 
@@ -114,14 +119,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Toast.makeText(context, "All data cleared", Toast.LENGTH_SHORT).show();
         onCreate(database);
-
     }
 
     //This removes specific row form table
     public void deleteData(int id, int isDeleted) {
         database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-
         contentValues.put(DELETED, isDeleted);
 
         long rowID = database.update(TABLE_NAME, contentValues, ID + "= ?", new String[]{String.valueOf(id)});
@@ -144,10 +147,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 DataItem dataItem = new DataItem(context);
 
                 dataItem.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+                dataItem.setTransactionType(cursor.getString(cursor.getColumnIndex(TRANSACTION_TYPE)));
                 dataItem.setCategory(cursor.getString(cursor.getColumnIndex(CATEGORY)));
                 dataItem.setAmount(cursor.getFloat(cursor.getColumnIndex(AMOUNT)));
                 dataItem.setNote(cursor.getString(cursor.getColumnIndex(NOTE)));
                 dataItem.setTimestamp(cursor.getLong(cursor.getColumnIndex(TIMESTAMP)));
+                dataItem.setIcon(dataItem.getTransactionType(), dataItem.getCategory());
 
                 allData.add(dataItem);
 
@@ -160,11 +165,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //This queries filtered data from table
-    public ArrayList<DataItem> getFilteredData(String category, String sortBy, long startTimestamp, long endTimestamp) {
+    public ArrayList<DataItem> getFilteredData(List<String> category, String sortBy, long startTimestamp, long endTimestamp) {
         String order = TIMESTAMP, orderBy = "DESC";
 
-        if (category.contains("All"))
-            category = "";
         if (sortBy.contains("ASC") || sortBy.contains("Oldest"))
             orderBy = "ASC";
         if (sortBy.contains("Amount"))
@@ -175,20 +178,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<DataItem> allData = new ArrayList<>();
         database = this.getReadableDatabase();
         try {
-            Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + CATEGORY
-                    + " LIKE '" + category + "%' AND " + TIMESTAMP + " BETWEEN " + startTimestamp
-                    + " AND " + endTimestamp + " AND " + DELETED + " = 0" + " ORDER BY " + order
-                    + " " + orderBy, null);
+            Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE "
+                    + CATEGORY + " IN ('" + TextUtils.join("','", category) + "') AND "
+                    + TIMESTAMP + " BETWEEN " + startTimestamp + " AND " + endTimestamp + " AND "
+                    + DELETED + " = 0" + " ORDER BY " + order + " " + orderBy, null);
 
             if (cursor.moveToFirst()) {
                 do {
                     DataItem dataItem = new DataItem(context);
 
                     dataItem.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+                    dataItem.setTransactionType(cursor.getString(cursor.getColumnIndex(TRANSACTION_TYPE)));
                     dataItem.setCategory(cursor.getString(cursor.getColumnIndex(CATEGORY)));
                     dataItem.setAmount(cursor.getFloat(cursor.getColumnIndex(AMOUNT)));
                     dataItem.setNote(cursor.getString(cursor.getColumnIndex(NOTE)));
                     dataItem.setTimestamp(cursor.getLong(cursor.getColumnIndex(TIMESTAMP)));
+                    dataItem.setIcon(dataItem.getTransactionType(), dataItem.getCategory());
 
                     allData.add(dataItem);
 
@@ -204,16 +209,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //This queries filtered sum from table
-    public float getFilteredSum(String category, long startTimestamp, long endTimestamp) {
-        if (category.contains("All"))
+    public float getFilteredSum(String transactionType, String category, long startTimestamp, long endTimestamp) {
+        if (category.equals("All"))
             category = "";
 
         float sum = 0;
         database = this.getReadableDatabase();
         try {
-            Cursor cursor = database.rawQuery("SELECT SUM(" + AMOUNT + ") FROM " + TABLE_NAME + " WHERE " + CATEGORY
-                    + " LIKE '" + category + "%' AND " + TIMESTAMP + " BETWEEN " + startTimestamp
-                    + " AND " + endTimestamp + " AND " + DELETED + " = 0", null);
+            Cursor cursor = database.rawQuery("SELECT SUM(" + AMOUNT + ") FROM " + TABLE_NAME + " WHERE "
+                    + TRANSACTION_TYPE + " = '" + transactionType + "' AND "
+                    + CATEGORY + " LIKE '" + category + "%' AND "
+                    + TIMESTAMP + " BETWEEN " + startTimestamp + " AND " + endTimestamp + " AND "
+                    + DELETED + " = 0", null);
 
             if (cursor.moveToFirst()) {
                 sum = cursor.getFloat(0);

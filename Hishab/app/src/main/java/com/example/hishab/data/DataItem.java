@@ -9,10 +9,12 @@ import java.util.Arrays;
 
 public class DataItem {
 
+    public static final String INCOME = "Income";
+    public static final String EXPENSE = "Expense";
+
     private final Context context;
-    private final String[] categoryArray;
-    private final TypedArray iconArray;
     private int id;
+    private String transactionType;
     private String category;
     private float amount;
     private String note;
@@ -22,8 +24,6 @@ public class DataItem {
     //Constructor
     public DataItem(Context context) {
         this.context = context;
-        categoryArray = context.getResources().getStringArray(R.array.expenseCategoryArray);
-        iconArray = context.getResources().obtainTypedArray(R.array.expenseIconArray);
     }
 
 
@@ -35,13 +35,20 @@ public class DataItem {
         this.id = id;
     }
 
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
     public String getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
-        setIcon(this.category);
     }
 
     public float getAmount() {
@@ -72,9 +79,16 @@ public class DataItem {
         return icon;
     }
 
-    private void setIcon(String category) {
+    //Use transaction type and category to set icon
+    public void setIcon(String transactionType, String category) {
+        String[] categoryArray = context.getResources().getStringArray(
+                transactionType.equals(EXPENSE) ? R.array.expenseCategoryArray : R.array.incomeCategoryArray);
+
+        TypedArray iconArray = context.getResources().obtainTypedArray(
+                transactionType.equals(EXPENSE) ? R.array.expenseIconArray : R.array.incomeIconArray);
+
         int index = Arrays.asList(categoryArray).indexOf(category);
-        this.icon = iconArray.getResourceId(index, -1);
+        this.icon = iconArray.getResourceId(index, 0);
     }
 
     @Override

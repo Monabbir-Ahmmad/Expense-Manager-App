@@ -20,7 +20,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
     private final Context context;
     private final ArrayList<DataItem> dataSet;
-    private int checkedPosition = -1;
+    private int clickedPosition = -1;
     private OnItemClickListener listener;
 
 
@@ -33,6 +33,11 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     // Set recycler item click listener
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    //Refresh item position
+    public void resetClickedPosition() {
+        clickedPosition = -1;
     }
 
     @NonNull
@@ -50,7 +55,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         holder.tvLabel.setText(dataSet.get(position).getCategory());
 
         // Clear highlighted items that are not selected
-        if (checkedPosition == position) {
+        if (clickedPosition == position) {
             holder.cardContainer.setStrokeWidth(5);
         } else {
             holder.cardContainer.setStrokeWidth(0);
@@ -91,10 +96,11 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
                     // On item click highlight that item
                     cardContainer.setStrokeWidth(5);
+                    cardContainer.setBackground(new MaterialCardView(context).getBackground());
 
-                    if (position != RecyclerView.NO_POSITION && checkedPosition != position) {
-                        notifyItemChanged(checkedPosition);
-                        checkedPosition = position;
+                    if (position != RecyclerView.NO_POSITION && clickedPosition != position) {
+                        notifyItemChanged(clickedPosition);
+                        clickedPosition = position;
                         listener.onItemClick(position);
                     }
                 }

@@ -81,8 +81,10 @@ public class OverviewFragment extends Fragment {
     //Toolbar menu item click
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_filter) { //Open filter dialog
+        //Open filter dialog
+        if (item.getItemId() == R.id.menu_filter) {
             FilterDialog filterDialog = new FilterDialog();
+            //Filter the dataset
             filterDialog.setOnPositiveButtonClickListener((categoryArray, sortBy, startTimestamp, endTimestamp) -> {
                 dataSet.clear();
                 dataSet.addAll(databaseHelper.getFilteredData(categoryArray, sortBy, startTimestamp, endTimestamp));

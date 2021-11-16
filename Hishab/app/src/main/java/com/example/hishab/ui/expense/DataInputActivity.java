@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 public class DataInputActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,6 +40,7 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
     private AutoCompleteTextView etDate, etTime;
     private MaterialButtonToggleGroup grpBtnTransactionType;
     private RecyclerView recyclerView;
+    private CategoryRecyclerAdapter recyclerAdapter;
     private DateTimeUtil dateTimeUtil;
     private boolean isUpdate;
     private String transactionType = DataItem.EXPENSE, category = null;
@@ -84,12 +84,11 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
                     transactionType = DataItem.INCOME;
                 }
                 category = null;
-                createRecyclerView(transactionType);
+                refreshRecyclerView(transactionType);
             }
         });
 
-        //Build recycler view on create to avoid error
-        createRecyclerView(transactionType);
+        createRecyclerView();
 
         //Set toolbar title and check if it's for record update or not
         if (!isUpdate) { //Add new record
@@ -132,9 +131,7 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
             datePicker.show(getSupportFragmentManager(), "Date picker");
 
             datePicker.addOnPositiveButtonClickListener(
-                    (MaterialPickerOnPositiveButtonClickListener<Long>) selection -> {
-                        etDate.setText(dateTimeUtil.getDate(selection));
-                    }
+                    (MaterialPickerOnPositiveButtonClickListener<Long>) selection -> etDate.setText(dateTimeUtil.getDate(selection))
             );
 
         } else if (v.getId() == R.id.et_time) { // Show time picker
@@ -154,8 +151,8 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    //This creates the RecyclerView based on transaction type
-    private void createRecyclerView(String transactionType) {
+    //Create the RecyclerView based on transaction type
+    private void createRecyclerView() {
         dataSet.clear();
         String[] categoryArray = getResources().getStringArray(transactionType.equals(DataItem.EXPENSE) ?
                 R.array.expenseCategoryArray : R.array.incomeCategoryArray);
@@ -167,10 +164,27 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
             dataSet.add(dataItem);
         }
 
-        CategoryRecyclerAdapter recyclerAdapter = new CategoryRecyclerAdapter(dataSet, this);
+        recyclerAdapter = new CategoryRecyclerAdapter(dataSet, this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerAdapter.setOnItemClickListener(position -> category = dataSet.get(position).getCategory());
+    }
+
+    //Refresh the RecyclerView based on transaction type
+    private void refreshRecyclerView(String transactionType) {
+        dataSet.clear();
+        String[] categoryArray = getResources().getStringArray(transactionType.equals(DataItem.EXPENSE) ?
+                R.array.expenseCategoryArray : R.array.incomeCategoryArray);
+
+        for (String s : categoryArray) {
+            DataItem dataItem = new DataItem(this);
+            dataItem.setCategory(s);
+            dataItem.setIcon(transactionType, s);
+            dataSet.add(dataItem);
+        }
+
+        recyclerAdapter.resetClickedPosition();
+        recyclerAdapter.notifyDataSetChanged();
     }
 
 
@@ -201,9 +215,7 @@ public class DataInputActivity extends AppCompatActivity implements View.OnClick
         int pos = Arrays.asList(categoryArray).indexOf(category);
         try {
             recyclerView.scrollToPosition(pos);
-            recyclerView.post(() -> {
-                Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(pos)).itemView.performClick();
-            });
+            recyclerView.post(() -> recyclerView.findViewHolderForAdapterPosition(pos).itemView.performClick());
         } catch (Exception e) {
             Log.e("Category Picker Error", e.getMessage());
         }

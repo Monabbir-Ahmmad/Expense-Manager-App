@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class OverviewFragment extends Fragment {
 
-    private TextView tvTotalExpense, tvTotalIncome;
+    private TextView tvTotalExpense, tvTotalIncome, tvBalanceLeft;
     private LinearLayout noDataLayout;
     private AppBarLayout appBarLayout;
     private RecyclerView recyclerView;
@@ -52,6 +52,7 @@ public class OverviewFragment extends Fragment {
         //Find views
         tvTotalExpense = view.findViewById(R.id.textView_totalExpense);
         tvTotalIncome = view.findViewById(R.id.textView_totalIncome);
+        tvBalanceLeft = view.findViewById(R.id.textView_balanceLeft);
         recyclerView = view.findViewById(R.id.recyclerView);
         noDataLayout = view.findViewById(R.id.noDataLayout);
         appBarLayout = view.findViewById(R.id.appBarLayout_overview);
@@ -120,7 +121,7 @@ public class OverviewFragment extends Fragment {
 
     //This calculates the top panel values and show no data found view if needed
     private void refreshTopViews() {
-        double totalExpense = 0, totalIncome = 0;
+        double totalExpense = 0, totalIncome = 0, balanceLeft;
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
         String currency = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("currency", "$");
 
@@ -130,10 +131,12 @@ public class OverviewFragment extends Fragment {
             else if (dataItem.getTransactionType().equals(DataItem.INCOME))
                 totalIncome += dataItem.getAmount();
         }
+        balanceLeft = totalIncome - totalExpense;
 
-        //This will set the current total expense
+        //This will set the total expense, income and balance left
         tvTotalExpense.setText(String.format("%s%s", currency, decimalFormat.format(totalExpense)));
         tvTotalIncome.setText(String.format("%s%s", currency, decimalFormat.format(totalIncome)));
+        tvBalanceLeft.setText(String.format("%s%s%s", balanceLeft < 0 ? "-" : "", currency, decimalFormat.format(Math.abs(balanceLeft))));
 
         //Show recycler view or no data found based on data found or not
         recyclerView.setVisibility(dataSet.isEmpty() ? View.GONE : View.VISIBLE);

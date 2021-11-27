@@ -20,8 +20,7 @@
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_misc"
-            app:tint="?attr/colorPrimary" />
+            android:src="@drawable/ic_misc" />
 
         <TextView
             android:id="@+id/rec_categoryLabel"

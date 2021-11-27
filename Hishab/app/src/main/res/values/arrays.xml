@@ -2,7 +2,6 @@
 <resources>
     <!-- Array for expense category names -->
     <string-array name="expenseCategoryArray">
-        <item>Bills</item>
         <item>Clothing</item>
         <item>Education</item>
         <item>Entertainment</item>
@@ -20,6 +19,7 @@
         <item>Tax</item>
         <item>Transport</item>
         <item>Travel</item>
+        <item>Utilities</item>
     </string-array>
 
     <!-- Array for income category names -->
@@ -36,7 +36,6 @@
 
     <!-- Array for expense category icons -->
     <integer-array name="expenseIconArray">
-        <item>@drawable/ic_bills</item>
         <item>@drawable/ic_clothes</item>
         <item>@drawable/ic_education</item>
         <item>@drawable/ic_entertainment</item>
@@ -54,6 +53,7 @@
         <item>@drawable/ic_tax</item>
         <item>@drawable/ic_transport</item>
         <item>@drawable/ic_travel</item>
+        <item>@drawable/ic_utilities</item>
     </integer-array>
 
     <!-- Array for income category icons -->
@@ -130,9 +130,9 @@
 
     <!-- Currency preference entries -->
     <string-array name="currency_entries">
-        <item>Dollar</item>
+        <item>Dollar(US)</item>
         <item>Euro</item>
-        <item>Pound</item>
+        <item>Pound(UK)</item>
         <item>Rupee</item>
         <item>Taka</item>
         <item>Yen</item>

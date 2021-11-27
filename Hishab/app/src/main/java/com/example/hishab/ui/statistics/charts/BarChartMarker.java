@@ -1,4 +1,4 @@
-package com.example.hishab.ui.statistics;
+package com.example.hishab.ui.statistics.charts;
 
 import android.content.Context;
 import android.graphics.Canvas;

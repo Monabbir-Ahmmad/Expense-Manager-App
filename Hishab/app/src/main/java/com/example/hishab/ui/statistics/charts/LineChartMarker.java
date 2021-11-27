@@ -1,4 +1,4 @@
-package com.example.hishab.ui.statistics;
+package com.example.hishab.ui.statistics.charts;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import androidx.preference.PreferenceManager;
 
-import com.example.hishab.DateTimeUtil;
 import com.example.hishab.R;
+import com.example.hishab.mutilities.DateTimeUtil;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
